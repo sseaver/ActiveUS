@@ -9,7 +9,7 @@
   <body>
     <nav>
       <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Active US</a>
+        <a href="{% url 'index_view' %}" class="brand-logo">Active US</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a href="{% url 'index_view' %}">Home</a></li>
           <li><a href="{% url 'user_create_view' %}">Create User</a></li>
@@ -18,6 +18,26 @@
         </ul>
       </div>
     </nav>
+    <a href="#" data-activates="slide-out" class="btn button-collapse">Side nav demo</a>
+    <ul id="slide-out" class="side-nav">
+      <li>
+        <div class="userView">
+          <div class="background">
+            <img src="{{ MEDIA_URL }}{{ sports.jpg }}">
+          </div>
+          <a href="{% url 'profile_view' %}"><img class="circle" src="{{ MEDIA_URL }}{{ request.user.profile.profile_picture }}"></a>
+          <a href="{% url 'profile_view' %}"><span class="white-text name">John Doe</span></a>
+          <a href="{% url 'profile_view' %}"><span class="white-text email">jdandturk@gmail.com</span></a>
+        </div>
+      </li>
+      <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+      <li><a href="#!">Second Link</a></li>
+      <li><div class="divider"></div></li>
+      <li><a class="subheader">Subheader</a></li>
+      <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+    </ul>
+    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+
     <br>
     {% block content %}
     {% endblock %}

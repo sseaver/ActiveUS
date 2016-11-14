@@ -22,6 +22,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
+
 
 @receiver(post_save, sender="auth.User")
 def create_user_profile(**kwargs):
