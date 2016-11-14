@@ -12,12 +12,13 @@ class Sport(models.Model):
 
 
 class Profile(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.OneToOneField('auth.User')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     age = models.IntegerField()
     profile_picture = models.FileField()
     fav_sports = models.ManyToManyField(Sport)
+    email = models.EmailField(max_length=200)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -37,7 +38,8 @@ def create_user_profile(**kwargs):
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
-    map_url = models.URLField()
+    lat = models.FloatField()
+    lng = models.FloatField()
 
     def __str__(self):
         return self.name
@@ -46,9 +48,9 @@ class Location(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
-    date = models.DateField(auto_now=False)
-    time = models.TimeField(auto_now=False)
-    location = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
+    location = models.ForeignKey(Location)
     participants = models.ManyToManyField('auth.User')
 
     def __str__(self):

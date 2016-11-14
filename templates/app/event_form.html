@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+{% endblock %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.name.errors }}
+        <label for="{{ form.name.id_for_label }}">Event Name</label>
+        {{ form.name }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.description.errors }}
+        <label for="{{ form.name.id_for_label }}">Event Description</label>
+        {{ form.description }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.date.errors }}
+        <label for="{{ form.date.id_for_label }}">Date</label>
+        <input id="id_date" name="date" type="date" class="datepicker">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.time.errors }}
+        <label for="{{ form.time.id_for_label }}">Time</label>
+        <input id="id_time" name="time" type="text" data-time-format="H:i" class="time ui-timepicker-input">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.location.errors }}
+        <label for="{{ form.location.id_for_label }}">Location</label>
+        {{ form.location }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
+        {{ form.participants.errors }}
+        <label for="{{ form.participants.id_for_label }}">Participants</label>
+        {{ form.participants }}
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+{% block js %}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+
+  <script type="text/javascript">
+    $('.datepicker').pickadate({
+      selectMonths: true,
+      selectYears: 2
+    });
+    $('#id_time').timepicker({ 'timeFormat': 'h:ia' });
+    $('#id_time').timepicker('option', {'minTime': '6:00am', 'timeFormat': 'h:ia' });
+    $('#id_time').timepicker('option', {'maxTime': '10:00pm', 'timeFormat': 'h:ia' });
+
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    $('select').material_select();
+    });
+  </script>
+
+{% endblock %}

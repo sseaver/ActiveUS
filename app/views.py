@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from app.models import Profile, Sport
+from app.models import Profile, Sport, Event
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
@@ -40,4 +40,10 @@ class ProfileUpdateView(UpdateView):
 class SportCreateView(CreateView):
     model = Sport
     fields = ("name",)
+    success_url = reverse_lazy('index_view')
+
+
+class EventCreateView(CreateView):
+    model = Event
+    fields = ("name", "description", "date", "time", "location", "participants")
     success_url = reverse_lazy('index_view')
