@@ -4,9 +4,9 @@
     <div class="row">
       <div class="col s8">
         <br>
-        <h3>Events In Your Area</h3>
+        <h4>Events In Your Area</h4><br>
         {% for event in object_list %}
-          {{ event.name }}<br>
+          <h5>{{ event.name }}</h5>
           {{ event.description }}<br>
           {{ event.date }}, {{ event.time }}<br>
           {{ event.location }}
@@ -20,5 +20,15 @@
       </form>
     </div>
   {% endif %}
+  <div class="row">
+    <div class="col s8">
+      {% for event in object_list %}
+      {% if event.sport in request.user.profile.fav_sports %}
+        {{ event }}
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
 
 {% endblock %}

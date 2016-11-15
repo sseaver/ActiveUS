@@ -37,7 +37,11 @@ class ProfileView(DetailView):
 
 class ProfileUpdateView(UpdateView):
     model = Profile
-    fields = ('first_name', 'last_name', 'age', 'profile_picture', 'fav_sports')
+    fields = ('first_name', 'last_name', 'age', 'profile_picture', 'fav_sports', 'email')
+    success_url = reverse_lazy('profile_view')
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
 
 
 class SportCreateView(CreateView):
@@ -48,7 +52,7 @@ class SportCreateView(CreateView):
 
 class EventCreateView(CreateView):
     model = Event
-    fields = ("name", "description", "date", "time", "location", "participants")
+    fields = ("name", "description", "sport", "date", "time", "location", "participants")
     success_url = reverse_lazy('index_view')
 
 

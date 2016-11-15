@@ -47,7 +47,8 @@ class Location(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
-    description = models.TextField()
+    description = models.TextField(null=True)
+    sport = models.ForeignKey(Sport)
     date = models.DateField()
     time = models.TimeField()
     location = models.ForeignKey(Location)

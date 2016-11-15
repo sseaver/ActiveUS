@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,15 +12,67 @@
   <body>
     <h3>My Google Maps Demo</h3>
     <div id="map"></div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script>
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: {lat: 34.88774, lng: -82.390189},
+          zoom: 13,
+          center: {lat: 34.85073, lng: -82.39898},
         });
-        var marker = new google.maps.Marker({
-          position: {lat: 34.84799, lng: -82.38395},
-          map: map,
+
+        $.getJSON("http://localhost:8000/api/locations/", function(result) {
+
+
+        var iconTennis = { url: "{% static 'tennis.png' %}",
+                           size: new google.maps.Size(20, 20),
+                           origin: new google.maps.Point(0, 0),
+                           anchor: new google.maps.Point(17, 34),
+                           scaledSize: new google.maps.Size(20, 20)};
+
+        var iconBaseball = { url: "{% static 'baseball.png' %}",
+                          size: new google.maps.Size(20, 20),
+                          origin: new google.maps.Point(0, 0),
+                          anchor: new google.maps.Point(17, 34),
+                          scaledSize: new google.maps.Size(20, 20)};
+
+        var iconBasketball = { url: "{% static 'basketball.png' %}",
+                          size: new google.maps.Size(20, 20),
+                          origin: new google.maps.Point(0, 0),
+                          anchor: new google.maps.Point(17, 34),
+                          scaledSize: new google.maps.Size(20, 20)};
+
+        var iconSoccer = { url: "{% static 'soccer.png' %}",
+                          size: new google.maps.Size(20, 20),
+                          origin: new google.maps.Point(0, 0),
+                          anchor: new google.maps.Point(17, 34),
+                          scaledSize: new google.maps.Size(20, 20)};
+
+        var iconVolleyball = { url: "{% static 'volleyball.png' %}",
+                          size: new google.maps.Size(20, 20),
+                          origin: new google.maps.Point(0, 0),
+                          anchor: new google.maps.Point(17, 34),
+                          scaledSize: new google.maps.Size(20, 20)};
+
+
+        for (var i = 0; i < result.length; i++) {
+          var location = result[i];
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(location.lat, location.lng),
+            map: map,
+            icon: iconTennis,
+            content: location.name
+          });
+
+          var infoWindow = new google.maps.InfoWindow();
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
+            return function() {
+              infoWindow.setContent(this.content);
+              infoWindow.open(map, this);
+            };
+          })(marker, i, infoWindow));
+
+        }
         });
       }
     </script>

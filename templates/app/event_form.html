@@ -28,6 +28,15 @@
   <div class="row">
     <div class="col s4">
       <div class="fieldWrapper">
+        {{ form.sport.errors }}
+        <label for="{{ form.sport.id_for_label }}">Sport</label>
+        {{ form.sport }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4">
+      <div class="fieldWrapper">
         {{ form.date.errors }}
         <label for="{{ form.date.id_for_label }}">Date</label>
         <input id="id_date" name="date" type="date" class="datepicker">
