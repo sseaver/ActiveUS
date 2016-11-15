@@ -22,44 +22,52 @@
 
         $.getJSON("http://localhost:8000/api/locations/", function(result) {
 
+          var iconSet = {
+            'Tennis': {
+              url: "{% static 'tennis.png' %}",
+              size: new google.maps.Size(20, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(20, 20)
+            },
+            'Baseball, Softball, Kickball': {
+              url: "{% static 'baseball.png' %}",
+              size: new google.maps.Size(20, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(20, 20)
+            },
+            'Basketball': {
+              url: "{% static 'basketball.png' %}",
+              size: new google.maps.Size(20, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(20, 20)
+            },
+            'Soccer': {
+              url: "{% static 'soccer.png' %}",
+              size: new google.maps.Size(20, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(20, 20)
+            },
+            'Volleyball': {
+              url: "{% static 'volleyball.png' %}",
+              size: new google.maps.Size(20, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(20, 20)
+            }
+          };
 
-        var iconTennis = { url: "{% static 'tennis.png' %}",
-                           size: new google.maps.Size(20, 20),
-                           origin: new google.maps.Point(0, 0),
-                           anchor: new google.maps.Point(17, 34),
-                           scaledSize: new google.maps.Size(20, 20)};
 
-        var iconBaseball = { url: "{% static 'baseball.png' %}",
-                          size: new google.maps.Size(20, 20),
-                          origin: new google.maps.Point(0, 0),
-                          anchor: new google.maps.Point(17, 34),
-                          scaledSize: new google.maps.Size(20, 20)};
-
-        var iconBasketball = { url: "{% static 'basketball.png' %}",
-                          size: new google.maps.Size(20, 20),
-                          origin: new google.maps.Point(0, 0),
-                          anchor: new google.maps.Point(17, 34),
-                          scaledSize: new google.maps.Size(20, 20)};
-
-        var iconSoccer = { url: "{% static 'soccer.png' %}",
-                          size: new google.maps.Size(20, 20),
-                          origin: new google.maps.Point(0, 0),
-                          anchor: new google.maps.Point(17, 34),
-                          scaledSize: new google.maps.Size(20, 20)};
-
-        var iconVolleyball = { url: "{% static 'volleyball.png' %}",
-                          size: new google.maps.Size(20, 20),
-                          origin: new google.maps.Point(0, 0),
-                          anchor: new google.maps.Point(17, 34),
-                          scaledSize: new google.maps.Size(20, 20)};
-
-
+        console.log(result);
         for (var i = 0; i < result.length; i++) {
           var location = result[i];
           var marker = new google.maps.Marker({
             position: new google.maps.LatLng(location.lat, location.lng),
             map: map,
-            icon: iconTennis,
+            icon: iconSet[location.sport],
             content: location.name
           });
 

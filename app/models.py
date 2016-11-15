@@ -38,6 +38,7 @@ def create_user_profile(**kwargs):
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
+    sport = models.ManyToManyField(Sport)
     lat = models.FloatField()
     lng = models.FloatField()
 
