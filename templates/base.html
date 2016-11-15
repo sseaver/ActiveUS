@@ -10,38 +10,47 @@
     {% endblock %}
   </head>
   <body>
-    <nav>
-      <div class="nav-wrapper">
-        <a href="{% url 'index_view' %}" class="brand-logo">Active US</a>
-        <ul id="nav-mobile" class="right">
-          <li><a href="{% url 'index_view' %}">Home</a></li>
-          <li><a href="{% url 'user_create_view' %}">Create User</a></li>
-          <li><a href="{% url 'sport_create_view' %}">Add Sport</a></li>
-          <li class="button-collapse"><a href="#" data-activates="slide-out">{{ request.user.profile.first_name }}</a></li>
-        </ul>
-      </div>
-    </nav>
-    <ul id="slide-out" class="side-nav">
-      <li>
-        <div class="userView">
-          <div class="background">
-            <img src="{{ MEDIA_URL }}sports.jpg" style="width: 300px">
-          </div>
-          <a href="{% url 'profile_view' %}"><img class="circle" src="{{ MEDIA_URL }}{{ request.user.profile.profile_picture }}"></a>
-          <a href="{% url 'profile_view' %}"><span class="white-text name">{{ request.user.profile.full_name }}</span></a>
-          <a href="{% url 'profile_view' %}"><span class="white-text email">{{ request.user.profile.email }}</span></a>
+
+    <div class="container-fluid">
+
+      <nav>
+        <div class="nav-wrapper">
+          <a href="{% url 'index_view' %}" class="brand-logo">Active US</a>
+          <ul id="nav-mobile" class="right">
+            <li><a href="{% url 'index_view' %}">Home</a></li>
+            <li><a href="{% url 'user_create_view' %}">Create User</a></li>
+            <li><a href="{% url 'sport_create_view' %}">Add Sport</a></li>
+            <li class="button-collapse"><a href="#" data-activates="slide-out">{{ request.user.profile.first_name }}</a></li>
+          </ul>
         </div>
-      </li>
-      <li><a href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
-      <li><a href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
-      <li><div class="divider"></div></li>
-      <li><a class="subheader">Your Events</a></li>
-      <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
-    </ul>
-    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-    <br>
-    {% block content %}
-    {% endblock %}
+      </nav>
+
+      <ul id="slide-out" class="side-nav">
+        <li>
+          <div class="userView">
+            <div class="background">
+              <img src="{{ MEDIA_URL }}sports.jpg" style="width: 300px">
+            </div>
+            <a href="{% url 'profile_view' %}"><img class="circle" src="{{ MEDIA_URL }}{{ request.user.profile.profile_picture }}"></a>
+            <a href="{% url 'profile_view' %}"><span class="white-text name">{{ request.user.profile.full_name }}</span></a>
+            <a href="{% url 'profile_view' %}"><span class="white-text email">{{ request.user.profile.email }}</span></a>
+          </div>
+        </li>
+        <li><a href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
+        <li><a href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Your Events</a></li>
+        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+      </ul>
+      <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+
+      <br>
+
+      {% block content %}
+      {% endblock %}
+
+    </div>
+
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
     <script type="text/javascript">
@@ -50,9 +59,9 @@
         closeOnclick: true,
         draggable: true
       });
-
     </script>
     {% block js %}
     {% endblock %}
+
   </body>
 </html>
