@@ -17,7 +17,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=50, blank=True, null=True)
     age = models.IntegerField(null=True)
     profile_picture = models.FileField(blank=True, null=True)
-    fav_sports = models.ManyToManyField(Sport)
+    fav_sports = models.ManyToManyField(Sport, blank=True)
     email = models.EmailField(max_length=200, blank=True, null=True)
 
     def __str__(self):
