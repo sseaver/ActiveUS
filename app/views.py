@@ -28,7 +28,6 @@ class UserCreateView(CreateView):
 
 
 class ProfileView(DetailView):
-    # model = Profile
     template_name = 'profile_view.html'
 
     def get_object(self, queryset=None):

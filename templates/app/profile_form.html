@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -55,6 +56,14 @@
         </div>
       </div>
     </div>
+    <input class="btn waves-effect waves-light" type="submit" name="" value="Save Changes">
   </form>
 
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  $(document).ready(function() {
+  $('select').material_select();
+  });
+</script>
 {% endblock %}
