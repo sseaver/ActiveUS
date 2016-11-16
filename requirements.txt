@@ -1,0 +1,7 @@
+django
+djangorestframework
+googlemaps
+django-multiselectfield
+requests
+dj-database-url
+gunicorn

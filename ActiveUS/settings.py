@@ -25,7 +25,7 @@ SECRET_KEY = 'q745)%#t@=2tzci=b+%8=4bkeum&7_#4t++=2s0l8_hi2e8&cg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['thawing-dusk-95411.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -125,3 +125,5 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
