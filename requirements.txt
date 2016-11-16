@@ -5,3 +5,4 @@ django-multiselectfield
 requests
 dj-database-url
 gunicorn
+psycopg2
