@@ -21,7 +21,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.first_name
 
     @property
     def full_name(self):

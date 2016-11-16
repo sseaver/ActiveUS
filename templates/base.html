@@ -18,9 +18,13 @@
           <a href="{% url 'index_view' %}" class="brand-logo">Active US</a>
           <ul id="nav-mobile" class="right">
             <li><a href="{% url 'index_view' %}">Home</a></li>
+            <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
+            {% if not request.user.is_authenticated %}
             <li><a href="{% url 'user_create_view' %}">Create User</a></li>
+            {% else %}
             <li><a href="{% url 'sport_create_view' %}">Add Sport</a></li>
             <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
+            {% endif %}
           </ul>
         </div>
       </nav>
@@ -39,8 +43,8 @@
         <li><a class="waves-effect" href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
         <li><a class="waves-effect" href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
         <li><div class="divider"></div></li>
-        <li><a class="subheader">Your Events</a></li>
-        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+        {% comment %}<li><a class="subheader">Your Events</a></li>{% endcomment %}
+        <li><a class="waves-effect" href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
       </ul>
 
       <br>
