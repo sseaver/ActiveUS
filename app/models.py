@@ -13,12 +13,12 @@ class Sport(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField('auth.User')
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    age = models.IntegerField()
-    profile_picture = models.FileField()
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    age = models.IntegerField(null=True)
+    profile_picture = models.FileField(blank=True, null=True)
     fav_sports = models.ManyToManyField(Sport)
-    email = models.EmailField(max_length=200)
+    email = models.EmailField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
