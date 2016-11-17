@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+  <div class="col s12 m6">
+    <div class="card medium" style="overflow: hidden;">
+      <div class="card-image waves-effect waves-block waves-light">
+        {% if object.sport == 'Soccer' %}
+        <img class="activator" src="{% static 'soccer_ball.jpg' %}">
+        {% elif object.sport == 'Basketball' %}
+        <img class="activator" src="{% static 'basketball_court.jpg' %}">
+        {% elif object.sport == 'Tennis' %}
+        <img class="activator" src="{% static 'tennis.jpg' %}">
+        {% elif object.sport == 'Volleyball' %}
+        <img class="activator" src="{% static 'volleyball_pic.jpg' %}">
+        {% elif object.sport == 'Baseball' or object.sport == 'Kickball' or object.sport == 'Softball' %}
+        <img class="activator" src="{% static 'basketball_court.jpg' %}">
+        {% endif %}
+      </div>
+      <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{ object.name }}<i class="material-icons right">more_vert</i></span>
+        <p>{{ object.date }} at {{ object.time }}</p>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{ object.name }}<i class="material-icons right">close</i></span>
+        <p>
+          {{ object.description }}<br><br>
+          Sport: {{ object.sport }}<br><br>
+          Location: {{ object.location }}<br><br>
+          # of Participants: {{ object.participants.count }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdateView, ProfileView,
-                       EventCreateView, LocationListCreateAPIView, MapTestView)
+                       EventCreateView, LocationListCreateAPIView, MapTestView, EventDetailView,
+                       EventUpdateView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,6 +30,8 @@ urlpatterns = [
     url(r'^accounts/profile/update/$', ProfileUpdateView.as_view(), name='profile_update_view'),
     url(r'^sport/create/$', SportCreateView.as_view(), name='sport_create_view'),
     url(r'^event/create/$', EventCreateView.as_view(), name='event_create_view'),
+    url(r'^event/(?P<pk>\d+)/$', EventDetailView.as_view(), name='event_detail_view'),
+    url(r'^event/(?P<pk>\d+)/update/$', EventUpdateView.as_view(), name='event_update_view'),
     url(r'^api/locations/$', LocationListCreateAPIView.as_view(), name='location_list_create_api_view'),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

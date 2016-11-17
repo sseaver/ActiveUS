@@ -43,6 +43,11 @@ class ProfileView(DetailView):
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.filter(participants__id=self.request.user.id).get
+        return context
+
 
 class ProfileUpdateView(UpdateView):
     model = Profile
@@ -63,6 +68,20 @@ class EventCreateView(CreateView):
     model = Event
     fields = ("name", "description", "sport", "date", "time", "location", "participants")
     success_url = reverse_lazy('index_view')
+
+
+class EventDetailView(DetailView):
+    model = Event
+    template_name = 'event_detail.html'
+
+
+class EventUpdateView(UpdateView):
+    model = Event
+    fields = ('participants',)
+    success_url = reverse_lazy('profile_view')
+
+    def get_object(self, **kwargs):
+        return Event.objects.get(id=self.kwargs['pk'])
 
 
 class LocationListCreateAPIView(ListCreateAPIView):

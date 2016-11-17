@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Active US</title>
+    <title>ActiveUS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {% block css %}
@@ -15,7 +15,7 @@
 
       <nav>
         <div class="nav-wrapper">
-          <a href="{% url 'index_view' %}" class="brand-logo">Active US</a>
+          <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
           <ul id="nav-mobile" class="right">
             <li><a href="{% url 'index_view' %}">Home</a></li>
             <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
@@ -43,7 +43,7 @@
         <li><a class="waves-effect" href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
         <li><a class="waves-effect" href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
         <li><div class="divider"></div></li>
-        {% comment %}<li><a class="subheader">Your Events</a></li>{% endcomment %}
+        <li><a href="#!" class="collection-item"><span class="new badge">4</span></a></li>
         <li><a class="waves-effect" href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
       </ul>
 
