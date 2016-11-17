@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from app.models import Profile, Sport, Event, Location
+from app.models import Profile, Sport, Event, Location, Star_Rating
 from django.views.generic import ListView, DetailView, TemplateView, FormView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from rest_framework.generics import ListCreateAPIView
-from app.serializers import LocationSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from app.serializers import LocationSerializer, ProfileSerializer
 
 # Create your views here.
 
@@ -49,6 +50,34 @@ class ProfileView(DetailView):
         return context
 
 
+class AjaxableResponseMixin(object):
+
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxableResponseMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            data = {
+                'pk': self.object.pk,
+            }
+            return JsonResponse(data)
+        else:
+            return response
+
+
+class RatingUpdateView(AjaxableResponseMixin, UpdateView):
+    model = Star_Rating
+    fields = ('rating',)
+
+
 class ProfileUpdateView(UpdateView):
     model = Profile
     fields = ('first_name', 'last_name', 'age', 'profile_picture', 'fav_sports', 'email')
@@ -87,6 +116,14 @@ class EventUpdateView(UpdateView):
 class LocationListCreateAPIView(ListCreateAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+
+
+class ProfileUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+    def get_object(self, **kwargs):
+        return Profile.objects.filter(id=self.kwargs['pk'])
 
 
 class MapTestView(TemplateView):

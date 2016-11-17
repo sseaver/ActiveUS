@@ -21,15 +21,17 @@
   </div>
 
   <div class="col s2">
-    <div class="rating">
-      <i class="material-icons">star_border</i>
-      <i class="material-icons">star_border</i>
-      <i class="material-icons">star_border</i>
-      <i class="material-icons">star_border</i>
-      <i class="material-icons">star_border</i>
-      <input type="hidden" name="rating" id="rating">
-    </div>
+    <form class="" action="{% url 'rating_update_view' object.id %}" method="post">
+      <div class="rating_stars">
+        <input class="rating" type="radio" name="rating" value="1" style="display:none;">
+        <input class="rating" type="radio" name="rating" value="2" style="display:none;">
+        <input class="rating" type="radio" name="rating" value="3" style="display:none;">
+        <input class="rating" type="radio" name="rating" value="4" style="display:none;">
+        <input class="rating" type="radio" name="rating" value="5" style="display:none;">
+      </div>
+    </form>
   </div>
+
 
 </div>
 <div class="row">
@@ -44,7 +46,9 @@
 <script type="text/javascript" src="{% static 'js/rating.js' %}"></script>
 <script type="text/javascript">
   $('document').ready(function(){
-    $('.rating').addRating();
+    $('.rating_stars').rating(function(vote, event){
+      $.post("{% url 'rating_update_view' object.id %}", {vote: vote});
+    });
   })
 </script>
 

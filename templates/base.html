@@ -43,7 +43,7 @@
         <li><a class="waves-effect" href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
         <li><a class="waves-effect" href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
         <li><div class="divider"></div></li>
-        <li><a href="#!" class="collection-item"><span class="new badge">4</span></a></li>
+        <li><a href="{% url 'profile_view' %}" class="collection-item"><span class="badge"></span>Your Events</a></li>
         <li><a class="waves-effect" href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
       </ul>
 

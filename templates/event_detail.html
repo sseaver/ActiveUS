@@ -1,20 +1,32 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block css %}
+<style>
+   #map {
+    height: 400px;
+    width: 100%;
+   }
+</style>
+{% endblock %}
 {% block content %}
 
 <div class="row">
-  <div class="col s12 m6">
+  <div class="col s6 m5">
     <div class="card medium" style="overflow: hidden;">
       <div class="card-image waves-effect waves-block waves-light">
-        {% if object.sport == 'Soccer' %}
+        {% if object.sport.name == 'Soccer' %}
         <img class="activator" src="{% static 'soccer_ball.jpg' %}">
-        {% elif object.sport == 'Basketball' %}
+        {% endif %}
+        {% if object.sport.name == 'Basketball' %}
         <img class="activator" src="{% static 'basketball_court.jpg' %}">
-        {% elif object.sport == 'Tennis' %}
+        {% endif %}
+        {% if object.sport.name == 'Tennis' %}
         <img class="activator" src="{% static 'tennis.jpg' %}">
-        {% elif object.sport == 'Volleyball' %}
+        {% endif %}
+        {% if object.sport.name == 'Volleyball' %}
         <img class="activator" src="{% static 'volleyball_pic.jpg' %}">
-        {% elif object.sport == 'Baseball' or object.sport == 'Kickball' or object.sport == 'Softball' %}
+        {% endif %}
+        {% if object.sport.name == 'Baseball' or object.sport.name == 'Kickball' or object.sport.name == 'Softball' %}
         <img class="activator" src="{% static 'basketball_court.jpg' %}">
         {% endif %}
       </div>
@@ -33,7 +45,115 @@
       </div>
     </div>
   </div>
+  <div class="col s1">
+  </div>
+  <div class="col s5">
+    <div id="map"></div>
+  </div>
 </div>
+{% endblock %}
+{% block js %}
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script>
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14,
+        center: {lat: {{ object.location.lat }}, lng: {{ object.location.lng }}},
+      });
+
+      $.getJSON("http://localhost:8000/api/locations/", function(result) {
+
+        var iconSet = {
+          Tennis: {
+            url: "{% static 'tennis.png' %}",
+            size: new google.maps.Size(20, 20),
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(20, 20)
+          },
+          BallField: {
+            url: "{% static 'baseball.png' %}",
+            size: new google.maps.Size(20, 20),
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(20, 20)
+          },
+          Basketball: {
+            url: "{% static 'basketball.png' %}",
+            size: new google.maps.Size(20, 20),
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(20, 20)
+          },
+          Soccer: {
+            url: "{% static 'soccer.png' %}",
+            size: new google.maps.Size(20, 20),
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(20, 20)
+          },
+          Volleyball: {
+            url: "{% static 'volleyball.png' %}",
+            size: new google.maps.Size(20, 20),
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(20, 20)
+          }
+        };
 
 
+      console.log(result);
+      for (var i = 0; i < result.length; i++) {
+        var location = result[i];
+        if (location.name.includes('Tennis')) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location.lat, location.lng),
+              map: map,
+              icon: iconSet['Tennis'],
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+            });
+          };
+        if (location.name.includes('Ball Field')) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location.lat, location.lng),
+              map: map,
+              icon: iconSet['BallField'],
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+            });
+          };
+        if (location.name.includes('Basketball')) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location.lat, location.lng),
+              map: map,
+              icon: iconSet['Basketball'],
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+            });
+          };
+        if (location.name.includes('Soccer')) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location.lat, location.lng),
+              map: map,
+              icon: iconSet['Soccer'],
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+            });
+          };
+        if (location.name.includes('Volleyball')) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location.lat, location.lng),
+              map: map,
+              icon: iconSet['Volleyball'],
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+            });
+          };
+
+        var infoWindow = new google.maps.InfoWindow();
+
+        google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
+          return function() {
+            infoWindow.setContent(this.content);
+            infoWindow.open(map, this);
+          };
+        })(marker, i, infoWindow));
+
+      }
+      });
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1oUv4FGoi_SFQ16BtK5huzJ0hUS_oDSc&callback=initMap">
+  </script>
 {% endblock %}

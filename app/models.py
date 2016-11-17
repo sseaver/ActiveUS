@@ -1,6 +1,9 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+import googlemaps
+gmaps = googlemaps.Client(key='AIzaSyA1oUv4FGoi_SFQ16BtK5huzJ0hUS_oDSc')
+
 # Create your models here.
 
 
@@ -36,6 +39,12 @@ def create_user_profile(**kwargs):
         Profile.objects.create(user=instance)
 
 
+class Star_Rating(models.Model):
+    rater = models.ForeignKey('auth.User')
+    being_rated = models.ForeignKey(Profile)
+    rating = models.IntegerField()
+
+
 class Location(models.Model):
     name = models.CharField(max_length=100)
     sport = models.ManyToManyField(Sport)
@@ -57,6 +66,11 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def address(self):
+        reverse_geocode_result = gmaps.reverse_geocode((self.location.lat, self.location.lng))
+        return reverse_geocode_result[0]['formatted_address']
 
 
 class Team(models.Model):
