@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from app.models import Profile, Sport, Event, Location, Star_Rating
-from django.views.generic import ListView, DetailView, TemplateView, FormView
+from django.views.generic import FormView, DetailView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
-from app.serializers import LocationSerializer, ProfileSerializer
+from app.serializers import LocationSerializer, RatingSerializer
 
 # Create your views here.
 
@@ -46,36 +46,17 @@ class ProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['event'] = Event.objects.filter(participants__id=self.request.user.id).get
+        context['event'] = Event.objects.filter(participants__id=self.request.user.id)
         return context
 
 
-class AjaxableResponseMixin(object):
+class RatingUpdateView(View):
 
-    def form_invalid(self, form):
-        response = super(AjaxableResponseMixin, self).form_invalid(form)
-        if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-        else:
-            return response
-
-    def form_valid(self, form):
-        # We make sure to call the parent's form_valid() method because
-        # it might do some processing (in the case of CreateView, it will
-        # call form.save() for example).
-        response = super(AjaxableResponseMixin, self).form_valid(form)
-        if self.request.is_ajax():
-            data = {
-                'pk': self.object.pk,
-            }
-            return JsonResponse(data)
-        else:
-            return response
-
-
-class RatingUpdateView(AjaxableResponseMixin, UpdateView):
-    model = Star_Rating
-    fields = ('rating',)
+    def post(self, request, profile_pk):
+        rating = self.request.POST.get('rating')
+        profile = Profile.objects.get(id=profile_pk)
+        Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
+        return HttpResponseRedirect('profile_view')
 
 
 class ProfileUpdateView(UpdateView):
@@ -118,12 +99,9 @@ class LocationListCreateAPIView(ListCreateAPIView):
     serializer_class = LocationSerializer
 
 
-class ProfileUpdateAPIView(RetrieveUpdateAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-    def get_object(self, **kwargs):
-        return Profile.objects.filter(id=self.kwargs['pk'])
+class RatingUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Star_Rating.objects.all()
+    serializer_class = RatingSerializer
 
 
 class MapTestView(TemplateView):

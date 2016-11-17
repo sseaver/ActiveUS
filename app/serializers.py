@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import Location, Profile
+from app.models import Location, Star_Rating
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -8,7 +8,7 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class RatingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = Star_Rating
         fields = ('rating',)

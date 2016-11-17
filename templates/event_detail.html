@@ -61,7 +61,7 @@
         center: {lat: {{ object.location.lat }}, lng: {{ object.location.lng }}},
       });
 
-      $.getJSON("http://localhost:8000/api/locations/", function(result) {
+      $.getJSON("/api/locations/", function(result) {
 
         var iconSet = {
           Tennis: {

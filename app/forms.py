@@ -1,8 +1,7 @@
 from django import forms
-from app.models import Event
+from app.models import Star_Rating
 
 
-class EventForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = ('name', 'description', 'date', 'time', 'location', 'participants')
+class RatingForm(forms.ModelForm):
+    model = Star_Rating
+    fields = ('rating',)
