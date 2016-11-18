@@ -19,6 +19,7 @@
   <div class="col s5">
     <h3>{{ object.full_name }}</h3>
   </div>
+
   <div class="col s2">
     <form class="" action="{% url 'rating_update_api_view' object.id %}" method="post">
       {% csrf_token %}
@@ -32,14 +33,18 @@
     </form>
   </div>
 
+
 </div>
 <div class="row">
   <div class="col s6">
-    <h3>Events</h3>
-    {% for event in object.events.all %}
-      <a href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a><br>
-    {% endfor %}
-
+    <h3>Your Events</h3>
+    {% if event.count <= 1 %}
+      <a href="{% url 'event_detail_view' event.id %}">{{ event }}</a>
+    {% else %}
+      {% for event in event %}
+        <a href="{% url 'event_detail_view' event.id %}">{{ event }}</a><br>
+      {% endfor %}
+    {% endif %}
   </div>
 </div>
 
@@ -77,10 +82,11 @@ $.ajaxSetup({
     }
 });
 
+
   $('document').ready(function(){
     $('.rating_stars').rating(function(vote, event){
       console.log(vote, event);
-      $.post("{% url 'rating_update_api_view' object.id %}", {voting: vote});
+      $.post("{% url 'rating_update_api_view' object.id %}", {vote: vote});
     });
   })
 </script>

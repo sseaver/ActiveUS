@@ -27,7 +27,7 @@
         <img class="activator" src="{% static 'volleyball_pic.jpg' %}">
         {% endif %}
         {% if object.sport.name == 'Baseball' or object.sport.name == 'Kickball' or object.sport.name == 'Softball' %}
-        <img class="activator" src="{% static 'basketball_court.jpg' %}">
+        <img class="activator" src="{% static 'baseball_diamond.jpg' %}">
         {% endif %}
       </div>
       <div class="card-content">
@@ -40,7 +40,7 @@
           {{ object.description }}<br><br>
           Sport: {{ object.sport }}<br><br>
           Location: {{ object.location }}<br><br>
-          # of Participants: {{ object.participants.count }}
+          Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.id %}">{{ person }}</a> |{% endfor %}
         </p>
       </div>
     </div>

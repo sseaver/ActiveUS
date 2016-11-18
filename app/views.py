@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from app.models import Profile, Sport, Event, Location, Star_Rating
-from django.views.generic import FormView, DetailView, TemplateView, View
+from django.views.generic import FormView, DetailView, TemplateView, View, ListView
 from django.views.generic.edit import CreateView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView
 from app.serializers import LocationSerializer, RatingSerializer
 
 # Create your views here.
@@ -39,24 +39,22 @@ class UserCreateView(FormView):
 
 
 class ProfileView(DetailView):
+    model = Event
     template_name = 'profile_view.html'
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['event'] = Event.objects.filter(participants__id=self.request.user.id)
-        return context
+
+class OthersProfileView(DetailView):
+    template_name = "profile_view.html"
+
+    def get_object(self, **kwargs):
+        return Profile.objects.get(id=self.kwargs['pk'])
 
 
 class RatingUpdateView(View):
-
-    def post(self, request, profile_pk):
-        rating = self.request.POST.get('rating')
-        profile = Profile.objects.get(id=profile_pk)
-        Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
-        return HttpResponseRedirect('profile_view')
+    pass
 
 
 class ProfileUpdateView(UpdateView):
@@ -84,6 +82,12 @@ class EventDetailView(DetailView):
     model = Event
     template_name = 'event_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        target = Event.objects.get(id=self.kwargs['pk'])
+        context['participants'] = target.participants.all()
+        return context
+
 
 class EventUpdateView(UpdateView):
     model = Event
@@ -99,9 +103,16 @@ class LocationListCreateAPIView(ListCreateAPIView):
     serializer_class = LocationSerializer
 
 
-class RatingUpdateAPIView(RetrieveUpdateAPIView):
+class RatingUpdateAPIView(CreateAPIView):
     queryset = Star_Rating.objects.all()
     serializer_class = RatingSerializer
+
+    def post(self, request, pk):
+        rating = self.request.POST.get('voting')
+        profile = Profile.objects.get(id=pk)
+        print(dir(request))
+        Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
+        return HttpResponseRedirect(reverse('profile_view'))
 
 
 class MapTestView(TemplateView):
