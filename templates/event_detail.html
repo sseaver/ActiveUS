@@ -32,7 +32,21 @@
       </div>
       <div class="card-content">
         <span class="card-title activator grey-text text-darken-4">{{ object.name }}<i class="material-icons right">more_vert</i></span>
-        <p>{{ object.date }} at {{ object.time }}</p>
+        <p>
+          {{ object.date }} at {{ object.time }}<br>
+          {% if request.user == object.created_by %}
+            <a class="btn-floating btn-large waves-effect waves-light red right" href="{% url 'event_delete_view' object.id %}"><i class="material-icons">delete</i></a><a class="btn-floating btn-large waves-effect waves-light blue right" href="{% url 'event_update_view' object.id %}"><i class="material-icons">mode_edit</i></a>
+          {% else %}
+          <form class="" action="{% url 'participants_update_view' object.id %}" method="post">
+            {% csrf_token %}
+            {% if request.user in participants %}
+            <button class="btn waves-effect waves-light red right" type="submit" name="participants" value="remove_participant">Remove Me from Participants</button>
+            {% else %}
+            <button class="btn-floating btn-large waves-effect waves-light green right" type="submit" name="participants" value="add_participant"><i class="material-icons">add</i></button>
+            {% endif %}
+          </form>
+          {% endif %}
+        </p>
       </div>
       <div class="card-reveal">
         <span class="card-title grey-text text-darken-4">{{ object.name }}<i class="material-icons right">close</i></span>

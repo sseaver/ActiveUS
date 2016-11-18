@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from app.models import Profile, Sport, Event, Location, Star_Rating
 from django.views.generic import FormView, DetailView, TemplateView, View, ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
@@ -91,11 +91,30 @@ class EventDetailView(DetailView):
 
 class EventUpdateView(UpdateView):
     model = Event
+    success_url = reverse_lazy('event_detail_view')
+
+
+class EventDeleteView(DeleteView):
+    model = Event
+    success_url = reverse_lazy('index_view')
+
+
+class EventParticipantsUpdateView(UpdateView):
+    model = Event
     fields = ('participants',)
     success_url = reverse_lazy('profile_view')
 
     def get_object(self, **kwargs):
         return Event.objects.get(id=self.kwargs['pk'])
+
+    def post(self, request, pk):
+        participants = self.request.POST.get('participants')
+        event = Event.objects.get(id=pk)
+        if participants == 'remove_participant':
+            event.participants.remove(user=self.request.user)
+        else:
+            event.participants.add(user=self.request.user)
+        return HttpResponseRedirect(reverse_lazy('event_detail_view'))
 
 
 class LocationListCreateAPIView(ListCreateAPIView):

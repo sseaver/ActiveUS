@@ -19,7 +19,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdateView, ProfileView,
                        EventCreateView, LocationListCreateAPIView, MapTestView, EventDetailView,
-                       EventUpdateView, RatingUpdateAPIView, RatingUpdateView, OthersProfileView)
+                       EventUpdateView, RatingUpdateAPIView, RatingUpdateView, OthersProfileView,
+                       EventDeleteView, EventParticipantsUpdateView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,6 +36,9 @@ urlpatterns = [
     url(r'^event/create/$', EventCreateView.as_view(), name='event_create_view'),
     url(r'^event/(?P<pk>\d+)/$', EventDetailView.as_view(), name='event_detail_view'),
     url(r'^event/(?P<pk>\d+)/update/$', EventUpdateView.as_view(), name='event_update_view'),
+    url(r'event/(?P<pk>\d+)/delete/$', EventDeleteView.as_view(), name='event_delete_view'),
+    url(r'^event/(?P<pk>\d+)/participants/update/$', EventParticipantsUpdateView.as_view(),
+        name='participants_update_view'),
     url(r'^api/locations/$', LocationListCreateAPIView.as_view(), name='location_list_create_api_view'),
     url(r'^api/profiles/(?P<pk>\d+)/rating/$', RatingUpdateAPIView.as_view(), name='rating_update_api_view'),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view')

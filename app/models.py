@@ -26,6 +26,7 @@ class Location(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
+    created_by = models.ForeignKey('auth.User', related_name='creator')
     description = models.TextField(null=True)
     sport = models.ForeignKey(Sport)
     date = models.DateField()
