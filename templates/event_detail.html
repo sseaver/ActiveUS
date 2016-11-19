@@ -54,7 +54,7 @@
           {{ object.description }}<br><br>
           Sport: {{ object.sport }}<br><br>
           Location: {{ object.location }}<br><br>
-          Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.id %}">{{ person }}</a> |{% endfor %}
+          Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.id %}">{{ person.profile.full_name }}</a> |{% endfor %}
         </p>
       </div>
     </div>

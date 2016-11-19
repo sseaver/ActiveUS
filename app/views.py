@@ -20,6 +20,7 @@ class IndexView(TemplateView):
     def get_context_data(self):
         context = super().get_context_data()
         context['login_form'] = AuthenticationForm
+        context['event'] = Event.objects.all()
         return context
 
 
