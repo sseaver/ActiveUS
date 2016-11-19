@@ -1,6 +1,8 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.conf import settings
+from rest_framework.authtoken.models import Token
 import googlemaps
 gmaps = googlemaps.Client(key='AIzaSyA1oUv4FGoi_SFQ16BtK5huzJ0hUS_oDSc')
 
@@ -67,6 +69,12 @@ def create_user_profile(**kwargs):
     instance = kwargs.get('instance')
     if created:
         Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 
 class Star_Rating(models.Model):

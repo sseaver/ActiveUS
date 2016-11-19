@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from rest_framework.authtoken.views import obtain_auth_token
 from django.conf.urls.static import static
 from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdateView, ProfileView,
                        EventCreateView, LocationListCreateAPIView, MapTestView, EventDetailView,
@@ -41,5 +42,6 @@ urlpatterns = [
         name='participants_update_view'),
     url(r'^api/locations/$', LocationListCreateAPIView.as_view(), name='location_list_create_api_view'),
     url(r'^api/profiles/(?P<pk>\d+)/rating/$', RatingUpdateAPIView.as_view(), name='rating_update_api_view'),
+    url(r'^api/obtain-token/$', obtain_auth_token),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
