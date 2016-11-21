@@ -23,11 +23,11 @@
     <form class="" action="{% url 'rating_create_api_view' object.id %}" method="post">
       {% csrf_token %}
       <div class="rating_stars">
-        <input class="rating" type="radio" name="rating" value="1" style="display:none;">
-        <input class="rating" type="radio" name="rating" value="2" style="display:none;">
-        <input class="rating" type="radio" name="rating" value="3" style="display:none;">
-        <input class="rating" type="radio" name="rating" value="4" style="display:none;">
-        <input class="rating" type="radio" name="rating" value="5" style="display:none;">
+        <input class="rating" type="radio" name="rating" value="1" {% if object.average_rating == 1 %}checked="checked"{% endif %} style="display:none;">
+        <input class="rating" type="radio" name="rating" value="2" {% if object.average_rating == 2 %}checked="checked"{% endif %} style="display:none;">
+        <input class="rating" type="radio" name="rating" value="3" {% if object.average_rating == 3 %}checked="checked"{% endif %} style="display:none;">
+        <input class="rating" type="radio" name="rating" value="4" {% if object.average_rating == 4 %}checked="checked"{% endif %} style="display:none;">
+        <input class="rating" type="radio" name="rating" value="5" {% if object.average_rating == 5 %}checked="checked"{% endif %} style="display:none;">
       </div>
     </form>
   </div>
@@ -39,7 +39,7 @@
     {% for event in object.events.all %}
       <a href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a><br>
     {% endfor %}
-
+<h1>{{ object.average_rating }}</h1>
   </div>
 </div>
 
@@ -48,6 +48,7 @@
 <script type="text/javascript" src="{% static 'js/rating.js' %}"></script>
 <script type="text/javascript">
 // using jQuery
+// FROM DJANGO DOCUMENTATION!!!!
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -76,11 +77,18 @@ $.ajaxSetup({
         }
     }
 });
-
+// END FROM DJANGO DOCUMENTATION
   $('document').ready(function(){
     $('.rating_stars').rating(function(vote, event){
       console.log(vote, event);
-      $.post("{% url 'rating_create_api_view' object.id %}", {voting: vote});
+      $.ajax({
+        url: "{% url 'rating_create_api_view' object.id %}",
+        type: "POST",
+        data: {voting: vote},
+        xhrFields: {
+          withCredentials: true
+        }
+      })
     });
   })
 </script>

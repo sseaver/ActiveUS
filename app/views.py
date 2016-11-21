@@ -8,10 +8,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
-from app.serializers import LocationSerializer, RatingSerializer
+from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
 import googlemaps
 import os
-gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
 
 # Create your views here.
 
@@ -127,6 +126,7 @@ class LocationCreateView(CreateView):
     success_url = reverse_lazy('index_view')
 
     def form_valid(self, form):
+        gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
         instance = form.save(commit=False)
         address = self.request.POST['address']
         geocode_result = gmaps.geocode(address)
@@ -149,14 +149,16 @@ class RatingCreateAPIView(CreateAPIView):
 
     def post(self, request, pk):
         rating = self.request.POST.get('voting')
+        print(rating)
         profile = Profile.objects.get(id=pk)
+        print(self.request.user)
         Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
         return HttpResponseRedirect(reverse('profile_view'))
 
 
 class RatingRetrieveAPIView(RetrieveAPIView):
     queryset = Star_Rating.objects.all()
-    serializer_class = RatingSerializer
+    serializer_class = AvgRatingSerializer
 
 
 class MapTestView(TemplateView):

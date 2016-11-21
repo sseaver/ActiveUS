@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^location/create', LocationCreateView.as_view(), name='location_create_view'),
     url(r'^api/locations/$', LocationListCreateAPIView.as_view(), name='location_list_create_api_view'),
     url(r'^api/profiles/(?P<pk>\d+)/rating/create/$', RatingCreateAPIView.as_view(), name='rating_create_api_view'),
-    url(r'api/profiles/(?P<pk>\d+)/rating/$', RatingRetrieveAPIView.as_view(), name='rating_retrieve_api_view'),
+    url(r'^api/profiles/(?P<pk>\d+)/rating/$', RatingRetrieveAPIView.as_view(), name='rating_retrieve_api_view'),
     url(r'^api/obtain-token/$', obtain_auth_token),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

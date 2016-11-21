@@ -14,30 +14,30 @@
   <div class="col s6 m5">
     <div class="card medium" style="overflow: hidden;">
       <div class="card-image waves-effect waves-block waves-light">
-        {% if object.sport.name == 'Soccer' %}
+        {% if event.sport.name == 'Soccer' %}
         <img class="activator" src="{% static 'soccer_ball.jpg' %}">
         {% endif %}
-        {% if object.sport.name == 'Basketball' %}
+        {% if event.sport.name == 'Basketball' %}
         <img class="activator" src="{% static 'basketball_court.jpg' %}">
         {% endif %}
-        {% if object.sport.name == 'Tennis' %}
+        {% if event.sport.name == 'Tennis' %}
         <img class="activator" src="{% static 'tennis.jpg' %}">
         {% endif %}
-        {% if object.sport.name == 'Volleyball' %}
+        {% if event.sport.name == 'Volleyball' %}
         <img class="activator" src="{% static 'volleyball_pic.jpg' %}">
         {% endif %}
-        {% if object.sport.name == 'Baseball' or object.sport.name == 'Kickball' or object.sport.name == 'Softball' %}
+        {% if event.sport.name == 'Baseball' or event.sport.name == 'Kickball' or event.sport.name == 'Softball' %}
         <img class="activator" src="{% static 'baseball_diamond.jpg' %}">
         {% endif %}
       </div>
       <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4">{{ object.name }}<i class="material-icons right">more_vert</i></span>
+        <span class="card-title activator grey-text text-darken-4">{{ event.name }}<i class="material-icons right">more_vert</i></span>
         <p>
-          {{ object.date }} at {{ object.time }}<br>
-          {% if request.user == object.created_by %}
-            <a class="btn-floating btn-large waves-effect waves-light red right" href="{% url 'event_delete_view' object.id %}"><i class="material-icons">delete</i></a><a class="btn-floating btn-large waves-effect waves-light blue right" href="{% url 'event_update_view' object.id %}"><i class="material-icons">mode_edit</i></a>
+          {{ event.date }} at {{ event.time }}<br>
+          {% if request.user == event.created_by %}
+            <a class="btn-floating btn-large waves-effect waves-light red right" href="{% url 'event_delete_view' event.id %}"><i class="material-icons">delete</i></a><a class="btn-floating btn-large waves-effect waves-light blue right" href="{% url 'event_update_view' event.id %}"><i class="material-icons">mode_edit</i></a>
           {% else %}
-          <form class="" action="{% url 'participants_update_view' object.id %}" method="post">
+          <form class="" action="{% url 'participants_update_view' event.id %}" method="post">
             {% csrf_token %}
             {% if request.user in participants %}
             <button class="btn waves-effect waves-light red right" type="submit" name="participants" value="remove_participant">Remove Me from Participants</button>
@@ -49,11 +49,11 @@
         </p>
       </div>
       <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">{{ object.name }}<i class="material-icons right">close</i></span>
+        <span class="card-title grey-text text-darken-4">{{ event.name }}<i class="material-icons right">close</i></span>
         <p>
-          {{ object.description }}<br><br>
-          Sport: {{ object.sport }}<br><br>
-          Location: {{ object.location }}<br><br>
+          {{ event.description }}<br><br>
+          Sport: {{ event.sport }}<br><br>
+          Location: {{ event.location }}<br><br>
           Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.id %}">{{ person.profile.full_name }}</a> |{% endfor %}
         </p>
       </div>
@@ -72,7 +72,7 @@
     function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
-        center: {lat: {{ object.location.lat }}, lng: {{ object.location.lng }}},
+        center: {lat: {{ event.location.lat }}, lng: {{ event.location.lng }}},
       });
 
       $.getJSON("/api/locations/", function(result) {
@@ -120,7 +120,7 @@
               position: new google.maps.LatLng(location.lat, location.lng),
               map: map,
               icon: iconSet['Tennis'],
-              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ event.address }}'
             });
           };
         // Baseball, Kickball, Softball
@@ -129,7 +129,7 @@
               position: new google.maps.LatLng(location.lat, location.lng),
               map: map,
               icon: iconSet['BallField'],
-              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ event.address }}'
             });
           };
         // Basketball
@@ -138,7 +138,7 @@
               position: new google.maps.LatLng(location.lat, location.lng),
               map: map,
               icon: iconSet['Basketball'],
-              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ event.address }}'
             });
           };
         // Soccer
@@ -147,7 +147,7 @@
               position: new google.maps.LatLng(location.lat, location.lng),
               map: map,
               icon: iconSet['Soccer'],
-              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ event.address }}'
             });
           };
         // Volleyball
@@ -156,7 +156,7 @@
               position: new google.maps.LatLng(location.lat, location.lng),
               map: map,
               icon: iconSet['Volleyball'],
-              content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
+              content: '<b>' + location.name + '</b>' + '<br>' + '{{ event.address }}'
             });
           };
 
@@ -173,6 +173,6 @@
       });
     }
   </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1oUv4FGoi_SFQ16BtK5huzJ0hUS_oDSc&callback=initMap">
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0WRCaT-zkZjTevamEkeQt8v4hZ4sLieo&callback=initMap">
   </script>
 {% endblock %}

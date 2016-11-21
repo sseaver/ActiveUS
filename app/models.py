@@ -1,11 +1,11 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.db.models import Avg
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 import googlemaps
 import os
-gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
 
 # Create your models here.
 
@@ -42,6 +42,7 @@ class Event(models.Model):
 
     @property
     def address(self):
+        gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
         reverse_geocode_result = gmaps.reverse_geocode((self.location.lat, self.location.lng))
         return reverse_geocode_result[0]['formatted_address']
 
@@ -63,6 +64,10 @@ class Profile(models.Model):
     def full_name(self):
         return self.first_name + " " + self.last_name
 
+    def average_rating(self):
+        star_dict = Star_Rating.objects.filter(being_rated=self).aggregate(Avg('rating'))
+        return round(star_dict['rating__avg'])
+
 
 @receiver(post_save, sender="auth.User")
 def create_user_profile(**kwargs):
@@ -82,10 +87,6 @@ class Star_Rating(models.Model):
     rater = models.ForeignKey('auth.User')
     being_rated = models.ForeignKey(Profile)
     rating = models.IntegerField()
-
-    @property
-    def average_rating(self):
-        pass
 
 
 class Team(models.Model):
