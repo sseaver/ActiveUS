@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView
 from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
 import googlemaps
 import os
@@ -149,10 +149,23 @@ class RatingCreateAPIView(CreateAPIView):
 
     def post(self, request, pk):
         rating = self.request.POST.get('voting')
-        print(rating)
         profile = Profile.objects.get(id=pk)
-        print(self.request.user)
-        Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
+        if Star_Rating.objects.get(rater=self.request.user, being_rated=profile):
+            pass
+        else:
+            Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
+        return HttpResponseRedirect(reverse('profile_view'))
+
+
+class RatingUpdateAPIView(UpdateAPIView):
+    queryset = Star_Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def put(self, request, pk):
+        rating = self.request.PUT.get('voting')
+        profile = Profile.objects.get(id=pk)
+        if Star_Rating.objects.get(rater=self.request.user, being_rated=profile):
+            Star_Rating.objects.update(rating=rating)
         return HttpResponseRedirect(reverse('profile_view'))
 
 

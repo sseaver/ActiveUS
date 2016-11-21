@@ -39,7 +39,6 @@
     {% for event in object.events.all %}
       <a href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a><br>
     {% endfor %}
-<h1>{{ object.average_rating }}</h1>
   </div>
 </div>
 
@@ -89,6 +88,14 @@ $.ajaxSetup({
           withCredentials: true
         }
       })
+      // $.ajax({
+      //   url: "{% url 'rating_update_api_view' object.id %}",
+      //   type: "PATCH",
+      //   data: {voting: vote},
+      //   xhrFields: {
+      //     withCredentials: true
+      //   }
+      // })
     });
   })
 </script>
