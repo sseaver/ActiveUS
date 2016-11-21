@@ -22,7 +22,7 @@
             {% if not request.user.is_authenticated %}
             <li><a href="{% url 'user_create_view' %}">Create User</a></li>
             {% else %}
-            <li><a href="{% url 'sport_create_view' %}">Add Sport</a></li>
+            <li><a href="{% url 'location_create_view' %}">Add Location</a></li>
             <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
             {% endif %}
           </ul>

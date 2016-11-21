@@ -60,44 +60,49 @@
         console.log(result);
         for (var i = 0; i < result.length; i++) {
           var location = result[i];
-          if (location.name.includes('Tennis')) {
+          // Tennis
+          if (location.sport == 4) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat, location.lng),
                 map: map,
                 icon: iconSet['Tennis'],
-                content: location.name
+                content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
               });
             };
-          if (location.name.includes('Ball Field')) {
+          // Baseball, Kickball, Softball
+          if (location.sport.includes(5)) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat, location.lng),
                 map: map,
                 icon: iconSet['BallField'],
-                content: location.name
+                content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
               });
             };
-          if (location.name.includes('Basketball')) {
+          // Basketball
+          if (location.sport == 2) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat, location.lng),
                 map: map,
                 icon: iconSet['Basketball'],
-                content: location.name
+                content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
               });
             };
-          if (location.name.includes('Soccer')) {
+          // Soccer
+          if (location.sport == 1) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat, location.lng),
                 map: map,
                 icon: iconSet['Soccer'],
-                content: location.name
+                content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
               });
             };
-          if (location.name.includes('Volleyball')) {
+          // Volleyball
+          if (location.sport == 8) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat, location.lng),
                 map: map,
                 icon: iconSet['Volleyball'],
-                content: location.name
+                content: '<b>' + location.name + '</b>' + '<br>' + '{{ object.address }}'
               });
             };
 

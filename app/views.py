@@ -7,8 +7,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from rest_framework.generics import ListCreateAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from app.serializers import LocationSerializer, RatingSerializer
+import googlemaps
+import os
+gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
 
 # Create your views here.
 
@@ -118,21 +121,42 @@ class EventParticipantsUpdateView(UpdateView):
         return HttpResponseRedirect(reverse_lazy('event_detail_view'))
 
 
+class LocationCreateView(CreateView):
+    model = Location
+    fields = ('name', 'sport')
+    success_url = reverse_lazy('index_view')
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        address = self.request.POST['address']
+        geocode_result = gmaps.geocode(address)
+        lat_lng_dict = geocode_result[0]['geometry']['location']
+        latitude = lat_lng_dict['lat']
+        longitude = lat_lng_dict['lng']
+        instance.lat = latitude
+        instance.lng = longitude
+        return super().form_valid(form)
+
+
 class LocationListCreateAPIView(ListCreateAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
 
-class RatingUpdateAPIView(CreateAPIView):
+class RatingCreateAPIView(CreateAPIView):
     queryset = Star_Rating.objects.all()
     serializer_class = RatingSerializer
 
     def post(self, request, pk):
         rating = self.request.POST.get('voting')
         profile = Profile.objects.get(id=pk)
-        print(dir(request))
         Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
         return HttpResponseRedirect(reverse('profile_view'))
+
+
+class RatingRetrieveAPIView(RetrieveAPIView):
+    queryset = Star_Rating.objects.all()
+    serializer_class = RatingSerializer
 
 
 class MapTestView(TemplateView):

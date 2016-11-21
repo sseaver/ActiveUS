@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s6">
+      <h3>Add New Location</h3>
+
+    </div>
+  </div>
+  <div class="row">
+    <form class="" action="" method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="row">
+        <div class="col s4">
+          <div class="fieldWrapper">
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label }}">Location Name</label>
+            {{ form.name }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s4">
+          <div class="fieldWrapper">
+            {{ form.sport.errors }}
+            <label for="{{ form.sport.id_for_label }}">Sport</label>
+            {{ form.sport }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s4">
+          <label for="">Address</label>
+          <input type="text" name="address" value="">
+        </div>
+      </div>
+      <input class="btn waves-effect waves-light" type="submit" value="Add Location">
+    </form>
+  </div>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  $(document).ready(function() {
+  $('select').material_select();
+  });
+</script>
+{% endblock %}

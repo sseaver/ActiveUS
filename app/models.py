@@ -4,7 +4,8 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 import googlemaps
-gmaps = googlemaps.Client(key='AIzaSyA1oUv4FGoi_SFQ16BtK5huzJ0hUS_oDSc')
+import os
+gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
 
 # Create your models here.
 
@@ -81,6 +82,10 @@ class Star_Rating(models.Model):
     rater = models.ForeignKey('auth.User')
     being_rated = models.ForeignKey(Profile)
     rating = models.IntegerField()
+
+    @property
+    def average_rating(self):
+        pass
 
 
 class Team(models.Model):
