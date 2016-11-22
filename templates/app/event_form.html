@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
 {% endblock %}
 {% block content %}
+{% if not object.created_by or request.user == object.created_by %}
 <form method="post">
   {% csrf_token %}
   {{ form.non_field_errors }}
@@ -70,9 +71,11 @@
       </div>
     </div>
   </div>
-  <input class="btn waves-effect waves-light" type="submit" name="" value="Create Event">
+  <input class="btn waves-effect waves-light" type="submit" name="" value="Submit">
 </form>
-
+{% else %}
+<h3>404 Error: You are not allowed to view this page</h3>
+{% endif %}
 {% endblock %}
 {% block js %}
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>

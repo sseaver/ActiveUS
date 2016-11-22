@@ -83,19 +83,11 @@ $.ajaxSetup({
       $.ajax({
         url: "{% url 'rating_create_api_view' object.id %}",
         type: "POST",
-        data: {voting: vote},
+        data: {rating: vote, being_rated: {{ object.id }}},
         xhrFields: {
           withCredentials: true
         }
       })
-      // $.ajax({
-      //   url: "{% url 'rating_update_api_view' object.id %}",
-      //   type: "PATCH",
-      //   data: {voting: vote},
-      //   xhrFields: {
-      //     withCredentials: true
-      //   }
-      // })
     });
   })
 </script>

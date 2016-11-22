@@ -97,3 +97,27 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    relation_user = models.ForeignKey('auth.User')
+    relation_event = models.ForeignKey(Event)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    edit_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        ordering = ("-creation_time",)
+
+
+class Reply(models.Model):
+    content = models.TextField()
+    relation_comment = models.ForeignKey(Comment)
+    relation_user = models.ForeignKey('auth.User')
+    creation_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content

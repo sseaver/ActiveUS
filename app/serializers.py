@@ -11,7 +11,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Star_Rating
-        fields = ('rating',)
+        fields = ('rating', 'being_rated')
 
 
 class AvgRatingSerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from app.models import Profile, Sport, Event, Location, Star_Rating
+from app.models import Profile, Sport, Event, Location, Star_Rating, Comment, Reply
 from django.views.generic import FormView, DetailView, TemplateView, View, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
@@ -89,12 +89,25 @@ class EventDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         target = Event.objects.get(id=self.kwargs['pk'])
         context['participants'] = target.participants.all()
+        context['comments'] = Comment.objects.filter(relation_event=target.id)
         return context
+
+    def post(self, request, pk, **kwargs):
+        event_participants = self.request.POST.get('participants')
+        event = Event.objects.get(id=pk)
+        if event_participants == 'remove_participant':
+            event.participants.remove(self.request.user)
+        else:
+            event.participants.add(self.request.user)
+        return HttpResponseRedirect(reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])]))
 
 
 class EventUpdateView(UpdateView):
     model = Event
-    success_url = reverse_lazy('event_detail_view')
+    fields = ("name", "description", "sport", "date", "time", "location", "participants")
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
 
 
 class EventDeleteView(DeleteView):
@@ -102,22 +115,30 @@ class EventDeleteView(DeleteView):
     success_url = reverse_lazy('index_view')
 
 
-class EventParticipantsUpdateView(UpdateView):
-    model = Event
-    fields = ('participants',)
-    success_url = reverse_lazy('profile_view')
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ('content',)
 
-    def get_object(self, **kwargs):
-        return Event.objects.get(id=self.kwargs['pk'])
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
 
-    def post(self, request, pk):
-        participants = self.request.POST.get('participants')
-        event = Event.objects.get(id=pk)
-        if participants == 'remove_participant':
-            event.participants.remove(user=self.request.user)
-        else:
-            event.participants.add(user=self.request.user)
-        return HttpResponseRedirect(reverse_lazy('event_detail_view'))
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.relation_user = self.request.user
+        instance.relation_event = Event.objects.get(id=self.kwargs['pk'])
+        return super().form_valid(form)
+
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ('content',)
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
+
+
+class TeamCreateView(CreateView):
+    pass
 
 
 class LocationCreateView(CreateView):
@@ -147,26 +168,9 @@ class RatingCreateAPIView(CreateAPIView):
     queryset = Star_Rating.objects.all()
     serializer_class = RatingSerializer
 
-    def post(self, request, pk):
-        rating = self.request.POST.get('voting')
-        profile = Profile.objects.get(id=pk)
-        if Star_Rating.objects.get(rater=self.request.user, being_rated=profile):
-            pass
-        else:
-            Star_Rating.objects.create(rater=self.request.user, being_rated=profile, rating=rating)
-        return HttpResponseRedirect(reverse('profile_view'))
-
-
-class RatingUpdateAPIView(UpdateAPIView):
-    queryset = Star_Rating.objects.all()
-    serializer_class = RatingSerializer
-
-    def put(self, request, pk):
-        rating = self.request.PUT.get('voting')
-        profile = Profile.objects.get(id=pk)
-        if Star_Rating.objects.get(rater=self.request.user, being_rated=profile):
-            Star_Rating.objects.update(rating=rating)
-        return HttpResponseRedirect(reverse('profile_view'))
+    def perform_create(self, serializer):
+        Star_Rating.objects.filter(rater=self.request.user, being_rated=serializer.validated_data["being_rated"]).delete()
+        serializer.save(rater=self.request.user)
 
 
 class RatingRetrieveAPIView(RetrieveAPIView):
