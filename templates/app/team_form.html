@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="row">
+      <div class="col s4">
+        <div class="fieldWrapper">
+          {{ form.name.errors }}
+          <label for="{{ form.name.id_for_label }}">Team Name</label>
+          {{ form.name }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s4">
+        <div class="fieldWrapper">
+          {{ form.home_field.errors }}
+          <label for="{{ form.home_field.id_for_label }}">Home Field</label>
+          {{ form.home_field }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s4">
+        <div class="fieldWrapper">
+          {{ form.players.errors }}
+          <label for="{{ form.players.id_for_label }}">Team Members</label>
+          {{ form.players }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s4">
+        <div class="fieldWrapper">
+          {{ form.logo.errors }}
+          <label for="{{ form.logo.id_for_label }}">Team Logo</label>
+          {{ form.logo }}
+        </div>
+      </div>
+    </div>
+    <input class="btn waves-effect waves-light" type="submit" value="Submit">
+  </form>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  $(document).ready(function() {
+  $('select').material_select();
+  });
+</script>
+{% endblock %}

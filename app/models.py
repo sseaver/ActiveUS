@@ -93,7 +93,7 @@ class Team(models.Model):
     name = models.CharField(max_length=50)
     home_field = models.ForeignKey(Location)
     players = models.ManyToManyField('auth.User')
-    logo = models.FileField(null=True)
+    logo = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return self.name

@@ -12,7 +12,6 @@
   <body>
 
     <div class="container-fluid">
-
       <nav>
         <div class="nav-wrapper">
           <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
@@ -22,7 +21,6 @@
             {% if not request.user.is_authenticated %}
             <li><a href="{% url 'user_create_view' %}">Create User</a></li>
             {% else %}
-            <li><a href="{% url 'location_create_view' %}">Add Location</a></li>
             <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
             {% endif %}
           </ul>
@@ -40,11 +38,23 @@
             <a href="{% url 'profile_view' %}"><span class="white-text email">{{ request.user.profile.email }}</span></a>
           </div>
         </li>
-        <li><a class="waves-effect" href="{% url 'profile_update_view' %}"><i class="material-icons">perm_identity</i>Update Profile</a></li>
-        <li><a class="waves-effect" href="{% url 'event_create_view' %}"><i class="material-icons">add</i>Create Event</a></li>
+        <li class="no-padding">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header">Create<i class="material-icons">add</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a href="{% url 'location_create_view' %}">Location</a></li>
+                  <li><a href="{% url 'event_create_view' %}">Event</a></li>
+                  <li><a href="{% url 'team_create_view' %}">Team</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
         <li><div class="divider"></div></li>
-        <li><a href="{% url 'profile_view' %}" class="collection-item"><span class="badge"></span>Your Events</a></li>
-        <li><a class="waves-effect" href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
+        <li><a class="waves-effect" href="{% url 'profile_update_view' %}">Update Profile<i class="material-icons">perm_identity</i></a></li>
+        <li><a class="waves-effect" href="{% url 'logout' %}?next={% url 'index_view' %}">Logout<i class="material-icons">cancel</i></a></li>
       </ul>
 
       <br>

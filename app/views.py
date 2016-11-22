@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from app.models import Profile, Sport, Event, Location, Star_Rating, Comment, Reply
-from django.views.generic import FormView, DetailView, TemplateView, View, ListView
+from app.models import Profile, Sport, Event, Location, Star_Rating, Comment, Team
+from django.views.generic import FormView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
@@ -54,10 +54,6 @@ class OthersProfileView(DetailView):
 
     def get_object(self, **kwargs):
         return Profile.objects.get(id=self.kwargs['pk'])
-
-
-class RatingUpdateView(View):
-    pass
 
 
 class ProfileUpdateView(UpdateView):
@@ -138,7 +134,26 @@ class CommentUpdateView(UpdateView):
 
 
 class TeamCreateView(CreateView):
-    pass
+    model = Team
+    fields = ('name', 'home_field', 'players', 'logo',)
+    success_url = reverse_lazy('index_view')
+
+
+class TeamUpdateView(UpdateView):
+    model = Team
+    fields = ('name', 'home_field', 'players', 'logo',)
+    success_url = reverse_lazy('index_view')
+
+
+class TeamDetailView(DetailView):
+    model = Team
+    template_name = 'team_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        target = Team.objects.get(id=self.kwargs['pk'])
+        context['players'] = target.players.all()
+        return context
 
 
 class LocationCreateView(CreateView):
@@ -180,3 +195,7 @@ class RatingRetrieveAPIView(RetrieveAPIView):
 
 class MapTestView(TemplateView):
     template_name = 'maptest.html'
+
+
+class ContactView(TemplateView):
+    template_name = 'contact.html'

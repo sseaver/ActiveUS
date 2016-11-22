@@ -20,9 +20,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.conf.urls.static import static
 from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdateView, ProfileView,
                        EventCreateView, LocationListCreateAPIView, MapTestView, EventDetailView,
-                       EventUpdateView, RatingCreateAPIView, RatingUpdateView, OthersProfileView,
+                       EventUpdateView, RatingCreateAPIView, OthersProfileView,
                        EventDeleteView, RatingRetrieveAPIView, CommentCreateView,
-                       LocationCreateView, CommentUpdateView)
+                       LocationCreateView, CommentUpdateView, TeamCreateView, TeamUpdateView,
+                       TeamDetailView, ContactView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,8 +33,6 @@ urlpatterns = [
     url(r'^accounts/profile/$', ProfileView.as_view(), name='profile_view'),
     url(r'^accounts/profile/update/$', ProfileUpdateView.as_view(), name='profile_update_view'),
     url(r'^profile/(?P<pk>\d+)/$', OthersProfileView.as_view(), name='others_profile_view'),
-    url(r'^rating/(?P<profile_pk>\d+)/update/$', RatingUpdateView.as_view(),
-        name='rating_update_view'),
     url(r'^sport/create/$', SportCreateView.as_view(), name='sport_create_view'),
     url(r'^event/create/$', EventCreateView.as_view(), name='event_create_view'),
     url(r'^event/(?P<pk>\d+)/$', EventDetailView.as_view(), name='event_detail_view'),
@@ -42,10 +41,14 @@ urlpatterns = [
     url(r'^event/(?P<pk>\d+)/comment/create/$', CommentCreateView.as_view(), name='comment_create_view'),
     url(r'^event/(?P<pk>\d+)/comment/(?P<comment_id>\d+)/update/$', CommentUpdateView.as_view(),
         name='comment_update_view'),
+    url(r'^team/create/$', TeamCreateView.as_view(), name='team_create_view'),
+    url(r'^team/(?P<pk>\d+)/update/$', TeamUpdateView.as_view(), name='team_update_view'),
+    url(r'^team/(?P<pk>\d+)/$', TeamDetailView.as_view(), name='team_detail_view'),
     url(r'^location/create', LocationCreateView.as_view(), name='location_create_view'),
     url(r'^api/locations/$', LocationListCreateAPIView.as_view(), name='location_list_create_api_view'),
     url(r'^api/profiles/(?P<pk>\d+)/rating/create/$', RatingCreateAPIView.as_view(), name='rating_create_api_view'),
     url(r'^api/profiles/(?P<pk>\d+)/rating/$', RatingRetrieveAPIView.as_view(), name='rating_retrieve_api_view'),
     url(r'^api/obtain-token/$', obtain_auth_token),
-    url(r'^maptest/$', MapTestView.as_view(), name='map_test_view')
+    url(r'^maptest/$', MapTestView.as_view(), name='map_test_view'),
+    url(r'^contact/$', ContactView.as_view(), name='contact_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
