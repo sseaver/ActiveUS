@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView
 from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
+from app.forms import ContactUsForm
 import googlemaps
 import os
 
@@ -22,7 +23,10 @@ class IndexView(TemplateView):
     def get_context_data(self):
         context = super().get_context_data()
         context['login_form'] = AuthenticationForm
-        context['event'] = Event.objects.all()
+        fav_sports = []
+        for sports in self.request.user.profile.fav_sports.all():
+            fav_sports.append(sports)
+            context['event'] = Event.objects.filter(sport__in=fav_sports)
         return context
 
 
@@ -73,8 +77,13 @@ class SportCreateView(CreateView):
 
 class EventCreateView(CreateView):
     model = Event
-    fields = ("name", "description", "sport", "date", "time", "location", "participants")
+    fields = ("name", "description", "sport", "date", "time", "location", "participants", "visibility")
     success_url = reverse_lazy('index_view')
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.created_by = self.request.user
+        return super().form_valid(form)
 
 
 class EventDetailView(DetailView):
@@ -100,7 +109,7 @@ class EventDetailView(DetailView):
 
 class EventUpdateView(UpdateView):
     model = Event
-    fields = ("name", "description", "sport", "date", "time", "location", "participants")
+    fields = ("name", "description", "sport", "date", "time", "location", "participants", "visibility")
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
@@ -197,5 +206,11 @@ class MapTestView(TemplateView):
     template_name = 'maptest.html'
 
 
-class ContactView(TemplateView):
+class ContactView(FormView):
     template_name = 'contact.html'
+    success_url = reverse_lazy('index_view')
+    form_class = ContactUsForm
+
+    def form_valid(self, form):
+        form.send_email()
+        return super().form_valid(form)

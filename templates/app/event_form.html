@@ -9,11 +9,18 @@
   {% csrf_token %}
   {{ form.non_field_errors }}
   <div class="row">
-    <div class="col s4">
+    <div class="col s3">
       <div class="fieldWrapper">
         {{ form.name.errors }}
         <label for="{{ form.name.id_for_label }}">Event Name</label>
         {{ form.name }}
+      </div>
+    </div>
+    <div class="col s2">
+      <div class="fieldWrapper">
+        {{ form.visibility.errors }}
+        <label for="{{ form.visibility.id_for_label }}">Type</label>
+        {{ form.visibility }}
       </div>
     </div>
   </div>

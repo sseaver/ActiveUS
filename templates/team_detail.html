@@ -13,8 +13,13 @@
   <div class="col s5">
     <h3>{{ object.name }}</h3>
     {% for player in players %}
-      | <a href="{% url 'others_profile_view' player.id %}">{{ player.profile.full_name }}</a>
-    {% endfor %} |
+    <a href="{% url 'others_profile_view' player.profile.id %}">
+    <div class="chip">
+      <img src="{{ MEDIA_URL }}{{ player.profile.profile_picture }}" alt="Picture of {{ player.profile.full_name }}" />
+      {{ player.profile.full_name }}
+    </div>
+    </a>
+    {% endfor %}
   </div>
 </div>
 <div class="row">

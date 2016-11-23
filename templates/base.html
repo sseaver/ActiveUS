@@ -8,24 +8,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {% block css %}
     {% endblock %}
+    <style media="screen">
+    .container {
+      width: 90%;
+    }
+    </style>
   </head>
   <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
+        <ul id="nav-mobile" class="right">
+          <li><a href="{% url 'index_view' %}">Home</a></li>
+          <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
+          {% if not request.user.is_authenticated %}
+          <li><a href="{% url 'user_create_view' %}">Create User</a></li>
+          {% else %}
+          <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
 
-    <div class="container-fluid">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
-          <ul id="nav-mobile" class="right">
-            <li><a href="{% url 'index_view' %}">Home</a></li>
-            <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
-            {% if not request.user.is_authenticated %}
-            <li><a href="{% url 'user_create_view' %}">Create User</a></li>
-            {% else %}
-            <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
+    <div class="container">
 
       <ul id="slide-out" class="side-nav">
         <li>

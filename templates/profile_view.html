@@ -13,11 +13,19 @@
       </div>
     </div>
   </div>
-  <div class="col s1">
-
-  </div>
+  <div class="col s1"></div>
   <div class="col s5">
     <h3>{{ object.full_name }}</h3>
+    <br>
+    <h5>Teams</h5>
+    {% for team in object.user.team_set.all %}
+    <a href="{% url 'team_detail_view' team.id %}">
+    <div class="chip">
+      <img src="{{ MEDIA_URL }}{{ team.logo }}" alt="{{ team.name }} Logo" />
+      {{ team.name }}
+    </div>
+    </a>
+    {% endfor %}
   </div>
   <div class="col s2">
     <h6>Sportsmanship Rating</h6>
@@ -35,11 +43,50 @@
 
 </div>
 <div class="row">
-  <div class="col s6">
-    <h3>Events</h3>
-    {% for event in object.events.all %}
-      <a href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a><br>
-    {% endfor %}
+  <div class="col s10">
+    <h4 class="center-align">Events</h4>
+  </div>
+</div>
+<div class="row">
+  <div class="col s5">
+    <ul class="collection with-header">
+      <li class="collection-header"><h5>Future</h5></li>
+      {% for event in object.user.event_set.all %}
+      {% if object.user == request.user and event.in_future %}
+        <li>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+        </li>
+      {% else %}
+      {% if event.is_public and event.in_future %}
+        <li>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+        </li>
+      {% endif %}
+      {% endif %}
+      <div class="divider"></div>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col s1"></div>
+  <div class="col s5">
+    <ul class="collection with-header">
+      <li class="collection-header"><h5>Past</h5></li>
+      {% for event in object.user.event_set.all %}
+      {% if object.user == request.user and not event.in_future %}
+        <li>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+        </li>
+        <div class="divider"></div>
+      {% else %}
+      {% if event.is_public and not event.in_future %}
+        <li>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+        </li>
+        <div class="divider"></div>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+    </ul>
   </div>
 </div>
 

@@ -6,7 +6,7 @@ from django.conf import settings
 from rest_framework.authtoken.models import Token
 import googlemaps
 import os
-
+from datetime import date
 # Create your models here.
 
 
@@ -27,6 +27,12 @@ class Location(models.Model):
         return self.name
 
 
+VISIBILITY = {
+    ('Public', 'Public'),
+    ('Private', 'Private')
+}
+
+
 class Event(models.Model):
     name = models.CharField(max_length=50)
     created_by = models.ForeignKey('auth.User', related_name='creator')
@@ -36,15 +42,25 @@ class Event(models.Model):
     time = models.TimeField()
     location = models.ForeignKey(Location)
     participants = models.ManyToManyField('auth.User')
+    visibility = models.CharField(max_length=7, choices=VISIBILITY)
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_public(self):
+        return self.visibility == 'Public'
 
     @property
     def address(self):
         gmaps = googlemaps.Client(key=(os.environ.get('gmapAPIkey')))
         reverse_geocode_result = gmaps.reverse_geocode((self.location.lat, self.location.lng))
         return reverse_geocode_result[0]['formatted_address']
+
+    @property
+    def in_future(self):
+        if self.date >= date.today():
+            return True
 
 
 class Profile(models.Model):
@@ -55,7 +71,6 @@ class Profile(models.Model):
     profile_picture = models.FileField(blank=True, null=True)
     fav_sports = models.ManyToManyField(Sport, blank=True)
     email = models.EmailField(max_length=200, blank=True, null=True)
-    events = models.ManyToManyField(Event)
 
     def __str__(self):
         return self.first_name

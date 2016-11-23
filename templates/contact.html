@@ -9,11 +9,40 @@
 </div>
 <div class="row">
   <div class="col s5">
-    
+
   </div>
   <div class="col s5 offset-s2">
 
   </div>
 </div>
+
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="row">
+    <div class="col s4 offset-s4">
+      <div class="fieldWrapper">
+        {{ form.sender.errors }}
+        <label for="{{ form.sender.id_for_label }}">From: </label>
+        {{ form.sender }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s4 offset-s4">
+      <div class="fieldWrapper">
+        {{ form.message.errors }}
+        <label for="{{ form.message.id_for_label }}">Message: </label>
+        {{ form.message }}
+        <br>
+        <button class="btn waves-effect waves-light" type="submit" value="Contact ActiveUS">
+          Contact ActiveUS!
+        </button>
+      </div>
+    </div>
+  </div>
+
+</form>
 
 {% endblock %}
