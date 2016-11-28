@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block css %}
+<style media="screen">
+  .card .card-image img {
+    height: 228px
+  }
+</style>
+{% endblock %}
 {% block content %}
     <div class="row">
       <div class="col s8">
@@ -30,12 +37,16 @@
         </div>
       </div>
     </div>
+    <br>
+    <br>
   {% endif %}
   {% if request.user.is_authenticated %}
   <div class="row">
-    {% for event in event %}
-    {% if event.in_future and event.is_public %}
-      <div class="col s6 m5">
+    <div class="col s1">
+
+    </div>
+    {% for event in object_list %}
+      <div class="col s4 m4">
         <div class="card">
           <div class="card-image">
             {% if event.sport.name == 'Soccer' %}
@@ -58,7 +69,6 @@
             <span class="card-title"><b>{{ event.name }}</b></span>
             <p>
               <b>{{ event.date }} at {{ event.time }}</b><br>
-              {{ event.description }}
             </p>
           </div>
           <div class="card-action">
@@ -66,8 +76,43 @@
           </div>
         </div>
       </div>
-  {% endif %}
+      <div class="col s1">
+
+      </div>
   {% endfor %}
+
   </div>
+  {% if is_paginated %}
+<nav>
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li>
+        <a href="?page={{ page_obj.previous_page_number }}">
+          <span>Previous</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="disabled">
+        <a href="#">
+          <span>Previous</span>
+        </a>
+      </li>
+    {% endif %}
+    {% if page_obj.has_next %}
+      <li>
+        <a href="?page={{ page_obj.next_page_number }}">
+          <span>Next</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="disabled">
+        <a href="#">
+          <span>Next</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
   {% endif %}
 {% endblock %}

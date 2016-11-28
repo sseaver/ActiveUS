@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from app.models import Profile, Sport, Event, Location, Star_Rating, Comment, Team
-from django.views.generic import FormView, DetailView, TemplateView
+from django.views.generic import FormView, DetailView, TemplateView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -16,18 +16,26 @@ import os
 # Create your views here.
 
 
-class IndexView(TemplateView):
+class IndexView(ListView):
     template_name = "index.html"
     success_url = reverse_lazy('index_view')
+    paginate_by = 2
 
     def get_context_data(self):
         context = super().get_context_data()
         context['login_form'] = AuthenticationForm
+        return context
+
+    def get_queryset(self):
         fav_sports = []
         for sports in self.request.user.profile.fav_sports.all():
             fav_sports.append(sports)
-            context['event'] = Event.objects.filter(sport__in=fav_sports)
-        return context
+        event_list = Event.objects.filter(sport__in=fav_sports)
+        filtered_list = []
+        for x in event_list:
+            if x.is_public and x.in_future:
+                filtered_list.append(x)
+        return filtered_list
 
 
 class UserCreateView(FormView):
