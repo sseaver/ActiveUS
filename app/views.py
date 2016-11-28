@@ -2,12 +2,12 @@ from django.shortcuts import render
 from app.models import Profile, Sport, Event, Location, Star_Rating, Comment, Team
 from django.views.generic import FormView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
 from app.forms import ContactUsForm
 import googlemaps

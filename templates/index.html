@@ -32,9 +32,9 @@
     </div>
   {% endif %}
   {% if request.user.is_authenticated %}
-  {% for event in event %}
-  {% if event.in_future and event.is_public %}
-    <div class="row">
+  <div class="row">
+    {% for event in event %}
+    {% if event.in_future and event.is_public %}
       <div class="col s6 m5">
         <div class="card">
           <div class="card-image">
@@ -66,8 +66,8 @@
           </div>
         </div>
       </div>
-    </div>
   {% endif %}
   {% endfor %}
+  </div>
   {% endif %}
 {% endblock %}

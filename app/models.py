@@ -44,6 +44,9 @@ class Event(models.Model):
     participants = models.ManyToManyField('auth.User')
     visibility = models.CharField(max_length=7, choices=VISIBILITY)
 
+    class Meta:
+        ordering = ("date",)
+
     def __str__(self):
         return self.name
 
