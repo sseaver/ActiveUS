@@ -27,6 +27,16 @@ class Location(models.Model):
         return self.name
 
 
+class Team(models.Model):
+    name = models.CharField(max_length=50)
+    home_field = models.ForeignKey(Location)
+    players = models.ManyToManyField('auth.User')
+    logo = models.FileField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 VISIBILITY = {
     ('Public', 'Public'),
     ('Private', 'Private')
@@ -41,7 +51,8 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField()
     location = models.ForeignKey(Location)
-    participants = models.ManyToManyField('auth.User')
+    participants = models.ManyToManyField('auth.User', blank=True)
+    team = models.ManyToManyField(Team, blank=True)
     visibility = models.CharField(max_length=7, choices=VISIBILITY)
 
     class Meta:
@@ -105,16 +116,6 @@ class Star_Rating(models.Model):
     rater = models.ForeignKey('auth.User')
     being_rated = models.ForeignKey(Profile)
     rating = models.IntegerField()
-
-
-class Team(models.Model):
-    name = models.CharField(max_length=50)
-    home_field = models.ForeignKey(Location)
-    players = models.ManyToManyField('auth.User')
-    logo = models.FileField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Comment(models.Model):

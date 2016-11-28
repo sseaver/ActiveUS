@@ -39,6 +39,9 @@
         <input class="rating" type="radio" name="rating" value="5" {% if object.average_rating == 5 %}checked="checked"{% endif %} style="display:none;">
       </div>
     </form>
+    <br>
+    <br>
+    <a class="btn waves-light" href="{% url 'email_user_view' %}?recipient={{ object.email }}">Contact</a>
   </div>
 
 </div>
@@ -54,12 +57,12 @@
       {% for event in object.user.event_set.all %}
       {% if object.user == request.user and event.in_future %}
         <li>
-          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{% if not event.is_public %}<span class="badge"><i class="material-icons">lock</i></span>{% endif %}{{ event.name }}</a>
         </li>
       {% else %}
       {% if event.is_public and event.in_future %}
         <li>
-          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{% if not event.is_public %}<span class="badge"><i class="material-icons">lock</i></span>{% endif %}{{ event.name }}</a>
         </li>
       {% endif %}
       {% endif %}
@@ -74,13 +77,13 @@
       {% for event in object.user.event_set.all %}
       {% if object.user == request.user and not event.in_future %}
         <li>
-          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{% if not event.is_public %}<span class="badge"><i class="material-icons">lock</i></span>{% endif %}{{ event.name }}</a>
         </li>
         <div class="divider"></div>
       {% else %}
       {% if event.is_public and not event.in_future %}
         <li>
-          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{{ event.name }}</a>
+          <a class="collection-item" href="{% url 'event_detail_view' event.id %}">{% if not event.is_public %}<span class="badge"><i class="material-icons">lock</i></span>{% endif %}{{ event.name }}</a>
         </li>
         <div class="divider"></div>
       {% endif %}

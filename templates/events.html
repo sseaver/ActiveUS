@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+<style media="screen">
+  .card .card-image img {
+    height: 228px
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="row">
+  <div class="col s1">
+
+  </div>
+  {% for event in object_list %}
+    <div class="col s4 m4">
+      <div class="card">
+        <div class="card-image">
+          {% if event.sport.name == 'Soccer' %}
+          <img src="{% static 'soccer_ball.jpg' %}">
+          {% endif %}
+          {% if event.sport.name == 'Basketball' %}
+          <img src="{% static 'basketball_court.jpg' %}">
+          {% endif %}
+          {% if event.sport.name == 'Tennis' %}
+          <img src="{% static 'tennis.jpg' %}">
+          {% endif %}
+          {% if event.sport.name == 'Volleyball' %}
+          <img src="{% static 'volleyball_pic.jpg' %}">
+          {% endif %}
+          {% if event.sport.name == 'Baseball' or event.sport.name == 'Kickball' or event.sport.name == 'Softball' %}
+          <img src="{% static 'baseball_diamond.jpg' %}">
+          {% endif %}
+        </div>
+        <div class="card-content">
+          <span class="card-title"><b>{{ event.name }}</b></span>
+          <p>
+            <b>{{ event.date }} at {{ event.time }}</b><br>
+          </p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'event_detail_view' event.id %}">See More!</a>
+        </div>
+      </div>
+    </div>
+    <div class="col s1">
+
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,118 +1,44 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block css %}
-<style media="screen">
-  .card .card-image img {
-    height: 228px
-  }
-</style>
-{% endblock %}
-{% block content %}
-    <div class="row">
-      <div class="col s8">
-        <div class="thumbnail">
-          <img src="{{ MEDIA_URL }}Sports-Logo.jpg" alt="Picture of sports"/>
-        </div>
-      </div>
-      {% if not request.user.is_authenticated %}
-      <div class="col s4">
-        <form action="{% url 'login' %}" method="post">
-          {% csrf_token %}
-          {{ login_form.as_p }}
-          <input class="btn waves-effect waves-light" type="submit" name="action" value="Login">
-          </form>
-        </div>
-      {% else %}
-      <div class="col s3">
-        <div class="card blue-grey darken-1 z-depth-5">
-          <div class="card-content white-text">
-            <span class="card-title">Welcome!</span>
-            <div class="card-content">
-              <p>ActiveUS is a great way for people to come together to play sports and stay physically fit!</p>
-            </div>
-            <div class="card-action">
-             <a href="{% url 'contact_view' %}">About ActiveUS</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br>
-    <br>
-  {% endif %}
-  {% if request.user.is_authenticated %}
-  <div class="row">
-    <div class="col s1">
 
+{% block content %}
+  <div class="row">
+    <div class="col s8">
+      <div class="thumbnail">
+        <img src="{{ MEDIA_URL }}ActiveUS_logo.png" alt="Picture of sports"/>
+      </div>
     </div>
-    {% for event in object_list %}
-      <div class="col s4 m4">
-        <div class="card">
-          <div class="card-image">
-            {% if event.sport.name == 'Soccer' %}
-            <img src="{% static 'soccer_ball.jpg' %}">
-            {% endif %}
-            {% if event.sport.name == 'Basketball' %}
-            <img src="{% static 'basketball_court.jpg' %}">
-            {% endif %}
-            {% if event.sport.name == 'Tennis' %}
-            <img src="{% static 'tennis.jpg' %}">
-            {% endif %}
-            {% if event.sport.name == 'Volleyball' %}
-            <img src="{% static 'volleyball_pic.jpg' %}">
-            {% endif %}
-            {% if event.sport.name == 'Baseball' or event.sport.name == 'Kickball' or event.sport.name == 'Softball' %}
-            <img src="{% static 'baseball_diamond.jpg' %}">
-            {% endif %}
-          </div>
+    {% if not request.user.is_authenticated %}
+    <div class="col s4">
+      <h5>Login Here</h5>
+      <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <input class="btn waves-effect waves-light" type="submit" name="action" value="Login"> <font size=2><a href="{% url 'user_create_view' %}">Not signed up yet? Create a profile!</a></font>
+        </form>
+      </div>
+    {% else %}
+    <div class="col s3">
+      <div class="card blue-grey darken-1 z-depth-5">
+        <div class="card-content white-text">
+          <span class="card-title">Welcome!</span>
           <div class="card-content">
-            <span class="card-title"><b>{{ event.name }}</b></span>
-            <p>
-              <b>{{ event.date }} at {{ event.time }}</b><br>
-            </p>
+            <p>ActiveUS is a great way for people to come together to play sports and stay physically fit!</p>
           </div>
           <div class="card-action">
-            <a href="{% url 'event_detail_view' event.id %}">See More!</a>
+           <a href="{% url 'contact_view' %}">Contact ActiveUS</a>
           </div>
         </div>
       </div>
-      <div class="col s1">
-
-      </div>
-  {% endfor %}
-
+    </div>
   </div>
-  {% if is_paginated %}
-<nav>
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li>
-        <a href="?page={{ page_obj.previous_page_number }}">
-          <span>Previous</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="disabled">
-        <a href="#">
-          <span>Previous</span>
-        </a>
-      </li>
-    {% endif %}
-    {% if page_obj.has_next %}
-      <li>
-        <a href="?page={{ page_obj.next_page_number }}">
-          <span>Next</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="disabled">
-        <a href="#">
-          <span>Next</span>
-        </a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
-{% endif %}
   {% endif %}
+  <div class="row">
+    <div class="col s3">
+      <p>
+        ActiveUS was designed as a way to bring people together who share a common interest in sports!
+        ActiveUS allows users to join events happening in their area, create events that other users can participate in, and communicate with participants/ team members in one simple application.
+      </p>
+    </div>
+  </div>
 {% endblock %}

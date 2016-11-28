@@ -43,6 +43,7 @@
             <a href="{% url 'profile_view' %}"><span class="white-text email">{{ request.user.profile.email }}</span></a>
           </div>
         </li>
+        <li><a class="waves-effect" href="{% url 'event_list_view' %}">Events</a></li>
         <li class="no-padding">
           <ul class="collapsible collapsible-accordion">
             <li>

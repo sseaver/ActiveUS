@@ -20,10 +20,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.conf.urls.static import static
 from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdateView, ProfileView,
                        EventCreateView, LocationListCreateAPIView, MapTestView, EventDetailView,
-                       EventUpdateView, RatingCreateAPIView, OthersProfileView,
+                       EventListView, EventUpdateView, RatingCreateAPIView, OthersProfileView,
                        EventDeleteView, RatingRetrieveAPIView, CommentCreateView,
                        LocationCreateView, CommentUpdateView, TeamCreateView, TeamUpdateView,
-                       TeamDetailView, ContactView)
+                       TeamDetailView, ContactView, EmailUserView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^event/(?P<pk>\d+)/$', EventDetailView.as_view(), name='event_detail_view'),
     url(r'^event/(?P<pk>\d+)/update/$', EventUpdateView.as_view(), name='event_update_view'),
     url(r'^event/(?P<pk>\d+)/delete/$', EventDeleteView.as_view(), name='event_delete_view'),
+    url(r'^events/$', EventListView.as_view(), name='event_list_view'),
     url(r'^event/(?P<pk>\d+)/comment/create/$', CommentCreateView.as_view(), name='comment_create_view'),
     url(r'^event/(?P<pk>\d+)/comment/(?P<comment_id>\d+)/update/$', CommentUpdateView.as_view(),
         name='comment_update_view'),
@@ -50,5 +51,6 @@ urlpatterns = [
     url(r'^api/profiles/(?P<pk>\d+)/rating/$', RatingRetrieveAPIView.as_view(), name='rating_retrieve_api_view'),
     url(r'^api/obtain-token/$', obtain_auth_token),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view'),
-    url(r'^contact/$', ContactView.as_view(), name='contact_view')
+    url(r'^contact/$', ContactView.as_view(), name='contact_view'),
+    url(r'^email_user/$', EmailUserView.as_view(), name='email_user_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

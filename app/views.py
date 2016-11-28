@@ -9,33 +9,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
-from app.forms import ContactUsForm
+from app.forms import ContactUsForm, ContactUserForm, CreateEventForm
 import googlemaps
 import os
 
 # Create your views here.
 
 
-class IndexView(ListView):
+class IndexView(TemplateView):
     template_name = "index.html"
     success_url = reverse_lazy('index_view')
-    paginate_by = 2
 
     def get_context_data(self):
         context = super().get_context_data()
         context['login_form'] = AuthenticationForm
         return context
-
-    def get_queryset(self):
-        fav_sports = []
-        for sports in self.request.user.profile.fav_sports.all():
-            fav_sports.append(sports)
-        event_list = Event.objects.filter(sport__in=fav_sports)
-        filtered_list = []
-        for x in event_list:
-            if x.is_public and x.in_future:
-                filtered_list.append(x)
-        return filtered_list
 
 
 class UserCreateView(FormView):
@@ -85,13 +73,20 @@ class SportCreateView(CreateView):
 
 class EventCreateView(CreateView):
     model = Event
-    fields = ("name", "description", "sport", "date", "time", "location", "participants", "visibility")
+    form_class = CreateEventForm
     success_url = reverse_lazy('index_view')
 
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.created_by = self.request.user
+        instance.participants = instance.team.players
         return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        print(kwargs)
+        kwargs.update(user=self.request.user)
+        return kwargs
 
 
 class EventDetailView(DetailView):
@@ -121,6 +116,24 @@ class EventUpdateView(UpdateView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
+
+
+class EventListView(ListView):
+    model = Event
+    template_name = 'events.html'
+
+    def get_queryset(self):
+        fav_sports = []
+        if not self.request.user.is_authenticated:
+            return []
+        for sports in self.request.user.profile.fav_sports.all():
+            fav_sports.append(sports)
+        event_list = Event.objects.filter(sport__in=fav_sports)
+        filtered_list = []
+        for x in event_list:
+            if x.is_public and x.in_future:
+                filtered_list.append(x)
+        return filtered_list
 
 
 class EventDeleteView(DeleteView):
@@ -212,6 +225,16 @@ class RatingRetrieveAPIView(RetrieveAPIView):
 
 class MapTestView(TemplateView):
     template_name = 'maptest.html'
+
+
+class EmailUserView(FormView):
+    form_class = ContactUserForm
+    success_url = reverse_lazy('index_view')
+    template_name = 'email_user.html'
+
+    def form_valid(self, form):
+        form.send_email()
+        return super().form_valid(form)
 
 
 class ContactView(FormView):
