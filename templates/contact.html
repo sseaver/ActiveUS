@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
 
 <div class="row">
@@ -22,24 +22,19 @@
   {{ form.non_field_errors }}
   <div class="row">
     <div class="col s4 offset-s4">
-      <div class="fieldWrapper">
-        {{ form.sender.errors }}
-        <label for="{{ form.sender.id_for_label }}">From: </label>
-        {{ form.sender }}
-      </div>
+      <label>Sender</label>
+      {% render_field form.sender class="input-field" placeholder="Your Email" value=request.user.profile.email %}
     </div>
   </div>
   <div class="row">
     <div class="col s4 offset-s4">
-      <div class="fieldWrapper">
-        {{ form.message.errors }}
-        <label for="{{ form.message.id_for_label }}">Message: </label>
-        {{ form.message }}
-        <br>
-        <button class="btn waves-effect waves-light" type="submit" value="Contact ActiveUS">
-          Contact ActiveUS!
-        </button>
-      </div>
+      <label>Message</label>
+      {{ form.message|attr:"placeholder: Type Message Here" }}
+      <br>
+      <br>
+      <button class="btn waves-effect waves-light" type="submit" value="Contact ActiveUS">
+        Send email to ActiveUS!
+      </button>
     </div>
   </div>
 

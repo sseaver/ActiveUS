@@ -5,16 +5,19 @@
     {% csrf_token %}
     <div class="row">
       <div class="col s4">
+        <label>Sender</label>
         {% render_field form.sender class="input-field" placeholder="Your Email" value=request.user.profile.email %}
       </div>
     </div>
     <div class="row">
       <div class="col s4">
+        <label>Recipient</label>
         {% render_field form.recipient class="input-field" placeholder="Recipient Email" value=request.GET.recipient %}
       </div>
     </div>
     <div class="row">
       <div class="col s4">
+        <label>Message</label>
         {{ form.message|attr:"placeholder: Type Message Here" }}
       </div>
     </div>
