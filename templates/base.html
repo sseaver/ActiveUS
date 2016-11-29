@@ -16,17 +16,19 @@
   </head>
   <body>
     <nav>
-      <div class="nav-wrapper">
-        <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
-        <ul id="nav-mobile" class="right">
-          <li><a href="{% url 'index_view' %}">Home</a></li>
-          <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
-          {% if not request.user.is_authenticated %}
-          <li><a href="{% url 'user_create_view' %}">Create User</a></li>
-          {% else %}
-          <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
-          {% endif %}
-        </ul>
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="{% url 'index_view' %}" class="brand-logo">ActiveUS</a>
+          <ul id="nav-mobile" class="right">
+            <li><a href="{% url 'index_view' %}">Home</a></li>
+            <li><a href="{% url 'map_test_view' %}">View Parks</a></li>
+            {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'user_create_view' %}">Create User</a></li>
+            {% else %}
+            <li class="button-collapse" data-activates="slide-out"><a href="#"><i class="material-icons">menu</i></a></li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
     </nav>
 
@@ -38,7 +40,7 @@
             <div class="background">
               <img src="{{ MEDIA_URL }}sports.jpg" style="width: 300px">
             </div>
-            <a href="{% url 'profile_view' %}"><img class="circle" src="{{ MEDIA_URL }}{{ request.user.profile.profile_picture }}"></a>
+            <a href="{% url 'profile_view' %}"><img class="circle" src="{{ request.user.profile.image_url }}"></a>
             <a href="{% url 'profile_view' %}"><span class="white-text name">{{ request.user.profile.full_name }}</span></a>
             <a href="{% url 'profile_view' %}"><span class="white-text email">{{ request.user.profile.email }}</span></a>
           </div>

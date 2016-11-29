@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db.models import Avg
 from django.conf import settings
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from rest_framework.authtoken.models import Token
 import googlemaps
 import os
@@ -35,6 +36,12 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def image_url(self):
+        if self.logo:
+            return self.logo.url
+        return static('default.jpg')
 
 
 VISIBILITY = {
@@ -92,6 +99,12 @@ class Profile(models.Model):
     @property
     def full_name(self):
         return self.first_name + " " + self.last_name
+
+    @property
+    def image_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        return static('default.jpg')
 
     def average_rating(self):
         star_dict = Star_Rating.objects.filter(being_rated=self).aggregate(Avg('rating'))

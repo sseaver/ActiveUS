@@ -9,6 +9,14 @@
 {% endblock %}
 {% block content %}
 
+{% if not object_list %}
+  <div class="row">
+    <div class="col s12">
+      <h4 class="center-align">You have not selected any favorite sports! <br> Click <a href="{% url 'profile_update_view' %}">here</a> to update your profile!</h4>
+    </div>
+  </div>
+{% endif %}
+
 {% if request.user.is_authenticated %}
 <div class="row">
   <div class="col s1">

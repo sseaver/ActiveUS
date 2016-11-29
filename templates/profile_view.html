@@ -9,7 +9,7 @@
   <div class="col s4">
     <div class="image-container">
       <div class="thumbnail">
-        <img src="{{ MEDIA_URL }}{{ object.profile_picture }}" alt="Picture of {{ object.first_name }}" class="circle responsive-img z-depth-5" />
+        <img src="{{ object.image_url }}" alt="Picture of {{ object.first_name }}" class="circle responsive-img z-depth-5" />
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@
         {% for team in object.user.team_set.all %}
           <a href="{% url 'team_detail_view' team.id %}">
           <div class="chip">
-            <img src="{{ MEDIA_URL }}{{ team.logo }}" alt="{{ team.name }} Logo" />
+            <img src="{{ team.image_url }}" alt="{{ team.name }} Logo" />
             {{ team.name }}
           </div>
           </a>
