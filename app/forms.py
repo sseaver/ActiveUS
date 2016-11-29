@@ -1,6 +1,6 @@
 from django import forms
 from django.core.mail import send_mail
-from app.models import Event
+from app.models import Event, Team
 
 
 class ContactUsForm(forms.Form):
@@ -38,6 +38,51 @@ class ContactUserForm(forms.Form):
         recipient_list = [recipient]
         send_mail(subject, body, "do_not_reply@ActiveUS.com", recipient_list)
 
+
+class MultiContactEmailForm(forms.Form):
+    sender = forms.CharField()
+    message = forms.CharField(widget=forms.Textarea)
+
+    def send_email(self, id):
+        recipient_list = []
+        for player in Team.objects.get(id=id).players.all():
+            recipient_list.append(player.profile.email)
+        sender = self.cleaned_data["sender"]
+        message = self.cleaned_data["message"]
+        subject = "Message from ActiveUS team"
+        body = """
+        Sent from ActiveUS.
+        From: {}
+        Message: {}
+        """.format(sender, message)
+        recipient_list = recipient_list
+        send_mail(subject, body, "do_not_reply@ActiveUS.com", recipient_list)
+
+
+# class EventParticipantsEmailForm(forms.Form):
+#     sender = forms.CharField()
+#     message = forms.CharField(widget=forms.Textarea)
+#
+#     def send_email(self, id):
+#         recipient_list = []
+#         if not Event.objects.get(id=id).team:
+#             for player in Event.objects.get(id=id).participants.all():
+#                 recipient_list.append(player.profile.email)
+#         else:
+#             for team in Event.objects.get(id=id).team.all():
+#                 for player in team:
+#                     recipient_list.append(player.profile.email)
+#         sender = self.cleaned_data["sender"]
+#         message = self.cleaned_data["message"]
+#         subject = "Message from ActiveUS team"
+#         body = """
+#         Sent from ActiveUS.
+#         From: {}
+#         Message: {}
+#         """.format(sender, message)
+#         recipient_list = recipient_list
+#         send_mail(subject, body, "do_not_reply@ActiveUS.com", recipient_list)
+#
 
 class CreateEventForm(forms.ModelForm):
     class Meta:

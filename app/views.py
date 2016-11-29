@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from app.serializers import LocationSerializer, RatingSerializer, AvgRatingSerializer
-from app.forms import ContactUsForm, ContactUserForm, CreateEventForm
+from app.forms import ContactUsForm, ContactUserForm, CreateEventForm, MultiContactEmailForm
 import googlemaps
 import os
 
@@ -79,12 +79,10 @@ class EventCreateView(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.created_by = self.request.user
-        instance.participants = instance.team.players.all()
         return super().form_valid(form)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        print(kwargs)
         kwargs.update(user=self.request.user)
         return kwargs
 
@@ -97,6 +95,7 @@ class EventDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         target = Event.objects.get(id=self.kwargs['pk'])
         context['participants'] = target.participants.all()
+        context['team'] = target.team.all()
         context['comments'] = Comment.objects.filter(relation_event=target.id)
         return context
 
@@ -235,6 +234,44 @@ class EmailUserView(FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
+
+
+class EmailTeamView(FormView):
+    form_class = MultiContactEmailForm
+    template_name = "email_team.html"
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('team_detail_view', args=[int(self.kwargs['pk'])])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        target = Team.objects.get(id=self.kwargs['pk'])
+        context['players'] = target.players.all()
+        return context
+
+    def form_valid(self, form):
+        form.send_email(self.kwargs['pk'])
+        return super().form_valid(form)
+
+
+# class EventParticipantsEmailView(FormView):
+#     form_class = EventParticipantsEmailForm
+#     template_name = "email_event_participants.html"
+#
+#     def get_success_url(self, **kwargs):
+#         return reverse_lazy('event_detail_view', args=[int(self.kwargs['pk'])])
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         target = Event.objects.get(id=self.kwargs['pk'])
+#         context['players'] = target.participants.all()
+#         if target.team:
+#             context['players'] = target.team.players.all()
+#         return context
+#
+#     def form_valid(self, form):
+#         form.send_email(self.kwargs['pk'])
+#         return super().form_valid(form)
 
 
 class ContactView(FormView):

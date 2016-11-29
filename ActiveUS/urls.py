@@ -23,7 +23,8 @@ from app.views import (IndexView, SportCreateView, UserCreateView, ProfileUpdate
                        EventListView, EventUpdateView, RatingCreateAPIView, OthersProfileView,
                        EventDeleteView, RatingRetrieveAPIView, CommentCreateView,
                        LocationCreateView, CommentUpdateView, TeamCreateView, TeamUpdateView,
-                       TeamDetailView, ContactView, EmailUserView)
+                       TeamDetailView, ContactView, EmailUserView, EmailTeamView,
+                       )
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -52,5 +53,8 @@ urlpatterns = [
     url(r'^api/obtain-token/$', obtain_auth_token),
     url(r'^maptest/$', MapTestView.as_view(), name='map_test_view'),
     url(r'^contact/$', ContactView.as_view(), name='contact_view'),
-    url(r'^email_user/$', EmailUserView.as_view(), name='email_user_view')
+    url(r'^email_user/$', EmailUserView.as_view(), name='email_user_view'),
+    url(r'^email_team/(?P<pk>\d+)/$', EmailTeamView.as_view(), name='email_team_view'),
+    # url(r'^email_event_participants/(?P<pk>\d+)/$', EventParticipantsEmailView.as_view(),
+    #     name="event_participants_email_view"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
