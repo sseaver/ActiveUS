@@ -79,7 +79,7 @@ class EventCreateView(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.created_by = self.request.user
-        instance.participants = instance.team.players
+        instance.participants = instance.team.players.all()
         return super().form_valid(form)
 
     def get_form_kwargs(self):
