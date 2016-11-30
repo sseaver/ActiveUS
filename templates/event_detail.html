@@ -60,7 +60,7 @@
           {{ event.description }}<br><br>
           Sport: {{ event.sport }}<br><br>
           Location: {{ event.location }}<br><br>
-          Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.id %}">{{ person.profile.full_name }}</a> |{% endfor %}
+          Participants: |{% for person in participants %} <a href="{% url 'others_profile_view' person.profile.id %}">{{ person.profile.full_name }}</a> |{% endfor %}
           {% if team %}{% for team in team %}<a href="{% url 'team_detail_view' team.id %}">{{ team.name }}</a> |{% endfor %}{% endif %}
         </p>
       </div>
