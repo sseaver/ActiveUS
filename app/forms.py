@@ -16,7 +16,7 @@ class ContactUsForm(forms.Form):
         From: {}
         Message: {}
         """.format(sender, message)
-        recipient_list = ["sseaver321@gmail.com"]
+        recipient_list = ["activeus321@gmail.com"]
         send_mail(subject, body, "do_not_reply@ActiveUS.com", recipient_list)
 
 
