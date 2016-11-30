@@ -167,6 +167,11 @@ class TeamCreateView(CreateView):
     fields = ('name', 'home_field', 'players', 'logo',)
     success_url = reverse_lazy('index_view')
 
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.created_by = self.request.user
+        return super().form_valid(form)
+
 
 class TeamUpdateView(UpdateView):
     model = Team
