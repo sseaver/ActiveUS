@@ -8,3 +8,5 @@ gunicorn
 psycopg2
 whitenoise
 django-widget-tweaks
+django-storages
+boto
