@@ -23,6 +23,10 @@
   </div>
   <div class="col s2">
     <a class="btn waves-light" href="{% url 'email_team_view' object.id %}">Contact</a>
+    <br>
+    {% if request.user == object.created_by %}
+    <a class="btn waves-light blue" href="{% url 'team_update_view' object.id %}">Update</a>
+    {% endif %}
   </div>
 </div>
 <div class="row">

@@ -30,6 +30,7 @@ class Location(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
+    created_by = models.ForeignKey('auth.User', related_name='captain')
     home_field = models.ForeignKey(Location)
     players = models.ManyToManyField('auth.User')
     logo = models.FileField(blank=True, null=True)
